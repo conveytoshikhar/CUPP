@@ -24,7 +24,7 @@ const LogoPlaceholder = (props) => {
     <View style={props.containerStyle}>
       <View style={styles.logoContainer}>
         <Text style={fontStyle}>C</Text>
-        <Icon style={{marginTop: iconMargin}} nameAndroid='md-leaf-outline' nameIOS='ios-leaf' color={accent} size={iconSize} />
+        <Icon style={{marginTop: iconMargin}} nameAndroid='md-leaf' nameIOS='ios-leaf' color={accent} size={iconSize} />
         <Text style={fontStyle}>nts</Text>
       </View>
 

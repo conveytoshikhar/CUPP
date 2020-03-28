@@ -78,15 +78,21 @@ class CharityDescriptionPage extends Component {
     );
 }
 
-uploadTransaction = () => {
+uploadTransaction = async () => {
   const {
     item,
     donationAmount
   } = this.state
-  console.log(item)
-  console.log(donationAmount)
   const user = firebase.auth().currentUser
   const charityRef = firebase.firestore().collection('charityOwners')
+  const transaction = {
+    name: firebase.auth().currentUser.displayName,
+    amount: donationAmount
+  }
+  await charityRef.doc(item.uid).update({
+    transactions: firebase.firestore.FieldValue.arrayUnion(transaction)
+  })
+  alert('Added')
 
 }
 
