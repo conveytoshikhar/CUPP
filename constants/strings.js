@@ -17,6 +17,7 @@ const strings = {
   forgotPassword: 'Forgot Password?',
   editEmailAddress: 'Edit Email Address',
   login: 'Login',
+  whereYourCentsMakeSense: 'Where your cents make sense',
   dontHaveAnAccount: 'Don\'t have an account?',
   registerNow: 'Register Now.',
   welcomeLogin: 'LOGIN',

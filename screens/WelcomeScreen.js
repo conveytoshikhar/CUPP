@@ -20,6 +20,7 @@ class WelcomeScreen extends React.Component {
       logoContainer,
       signUpButton,
       buttonContainer,
+      subHeading
     } = styles
 
     const {
@@ -34,7 +35,8 @@ class WelcomeScreen extends React.Component {
           style={backgroundStyle}>
           <View style={contentContainer}>
             <View style={logoContainer}>
-              <LogoPlaceholder accent={colors.colorAccent} size={120} />
+              <LogoPlaceholder accent={colors.colorAccent} size={80} iconSize={55} iconMargin={24} />
+              <Text style={subHeading}>{strings.whereYourCentsMakeSense}</Text>
             </View>
             <View style={buttonContainer}>
               <OutlineButton
@@ -68,6 +70,12 @@ const styles = StyleSheet.create({
   backgroundStyle: {
     width: '100%',
     height: '100%'
+  },
+  subHeading: {
+    fontSize: 23,
+    color: colors.colorAccent,
+    fontFamily: customFonts.mediumItalic,
+    marginTop: 4
   },
   contentContainer: {
     width: '100%',

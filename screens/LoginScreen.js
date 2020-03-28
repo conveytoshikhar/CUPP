@@ -62,7 +62,7 @@ class LoginScreen extends Component {
               style={{ ...commonStyling.backButtonStyling }}
               onPress={() => navigation.goBack()} />
 
-            <LogoPlaceholder accent={colors.colorPrimary} size={44} />
+            <LogoPlaceholder accent={colors.colorPrimary} size={44} iconSize={32} iconMargin={12}/>
           </View>
 
           <View style={contentContainer}>
