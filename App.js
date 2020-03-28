@@ -7,14 +7,16 @@ import { screens } from './constants';
 import * as Font from 'expo-font';
 import LoginScreen from './screens/LoginScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
 
 const AppNavigator = createStackNavigator({
   SplashScreen: SplashScreen,
   LoginScreen: LoginScreen,
-  RegistrationScreen: RegistrationScreen
+  RegistrationScreen: RegistrationScreen, 
+  WelcomeScreen: WelcomeScreen
 },
   {
-    initialRouteName: screens.RegistrationScreen
+    initialRouteName: screens.WelcomeScreen
   })
 
 const AppContainer = createAppContainer(AppNavigator);
