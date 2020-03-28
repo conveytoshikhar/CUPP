@@ -7,7 +7,7 @@ import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
 
 
-class ClientTransactionScreen extends Component {
+class CharityTransactionScreen extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -239,12 +239,12 @@ const styles = StyleSheet.create({
 
 })
 
-ClientTransactionScreen.navigationOptions = {
+CharityTransactionScreen.navigationOptions = {
   header: null
 }
 
-ClientTransactionScreen.propTypes = {
+CharityTransactionScreen.propTypes = {
   navigation: PropTypes.object
 }
 
-export default ClientTransactionScreen
+export default CharityTransactionScreen

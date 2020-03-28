@@ -91,7 +91,7 @@ class LoginScreen extends Component {
         screenToNavigate = screens.ClientHome
       }else{
         //change later
-        screenToNavigate = screens.ProfileScreen 
+        screenToNavigate = screens.CharityHome 
       }
       this.setState({
         loginButtonLoading: false

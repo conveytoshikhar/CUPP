@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, ImageBackground, Modal, TouchableOpacity, TouchableWithoutFeedback} from 'react-native'
 import { Heading, InputWithSubHeading, Icon, Cross, Button } from '../Components'
-import { dimens, colors, customFonts, strings } from '../constants'
+import { dimens, colors, customFonts, strings, screens } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
+import { Utils } from '../utils';
 
 class CharityDetailsScreen extends Component {
   constructor(props) {
@@ -12,7 +13,9 @@ class CharityDetailsScreen extends Component {
     this.state = {
       navigation: props.navigation,
       charityNameEntered: null,
-      showImagePicker:false
+      showImagePicker:false,
+      charityDescriptionEntered: null,
+      showLoadingDialog: false
     }
   }
 
@@ -54,12 +57,12 @@ class CharityDetailsScreen extends Component {
                 <Button
                   title='Upload from library'
                   textColor={colors.colorAccent}
-                  onPress={() => { this.updateImagePickerValue('library') }}
+                  onPress={null}
                   style={deleteButtonModal} />
                 <Button
                   title='Click from camera'
                   textColor={colors.colorAccent}
-                  onPress={() => { this.updateImagePickerValue('camera') }}
+                  onPress={null}
                   style={cancelButtonModal} />
               </View>
             </View>
@@ -74,8 +77,36 @@ class CharityDetailsScreen extends Component {
       charityNameEntered: text
     })
   }
-  submitButtonOnPress = () => {
 
+  setDescription = (text) => {
+    this.setState({
+      charityDescriptionEntered: text
+    })
+  }
+
+  submitButtonOnPress = async () => {
+    const {
+      charityNameEntered,
+      charityDescriptionEntered
+    } = this.state
+
+    this.setState({
+      showLoadingDialog: true
+    })
+
+    const user = firebase.auth().currentUser
+    const uid = user.uid
+    const charityRef = firebase.firestore().collection('charityOwners')
+
+    await charityRef.doc(uid).update({
+      charityName: charityNameEntered,
+      charityDescription: charityDescriptionEntered,
+      charityImageURL: 'https://screenshotlayer.com/images/assets/placeholder.png'
+    })
+    this.setState({
+      showLoadingDialog: false
+    })
+    Utils.dispatchScreen(screens.ProfileScreen, 100, this.state.navigation)
   }
 
   render() {
@@ -115,7 +146,7 @@ class CharityDetailsScreen extends Component {
             subHeadingTitle='NGO/Charity Name'
             autoCapitalize='words'
             errorTitle={this.state.nameErrorTitle}
-            onChangeText={this.setNameEntered}
+            onChangeText={this.setCharityNameEntered}
             errorStatus={this.state.nameErrorStatus}
             editable={!this.state.submitButtonClicked}
             containerStyle={{ marginTop: 5, marginBottom: 5 }}
@@ -126,10 +157,8 @@ class CharityDetailsScreen extends Component {
             autoCorrect={false}
             autoCompleteType='name'
             subHeadingTitle='Short Description'
-            autoCapitalize='words'
-            multiline={true}
             errorTitle={this.state.nameErrorTitle}
-            onChangeText={this.setNameEntered}
+            onChangeText={this.setDescription}
             errorStatus={this.state.nameErrorStatus}
             editable={!this.state.submitButtonClicked}
             containerStyle={{ marginTop: 5, marginBottom: 5 }}
@@ -158,7 +187,7 @@ class CharityDetailsScreen extends Component {
         <View style={buttonContainer}>
           <Button
             title={strings.submit}
-            onPress={this.submitButtonOnClick}
+            onPress={this.submitButtonOnPress}
             style={addButtonStyle}
             textColor={colors.colorAccent}
             isLoading={this.state.showLoadingDialog} />

@@ -47,7 +47,10 @@ class ClientCharityScreen extends Component {
         amountReceived: 123.30,
         transactionReceived: 13,
         helpers: 11,
-        transactions: []
+        transactions: [],
+        charityName: null,
+        charityDescription: null,
+        charityImageURL: null
       })
     }
     Utils.dispatchScreen(screen, undefined, this.state.navigation);
@@ -78,7 +81,7 @@ class ClientCharityScreen extends Component {
       <ImageBackground source={require('../assets/Onboarding/restaurantOwner.jpg')} style={lowerHalfContainer}>
         <TouchableOpacity 
           style={{...textContainer,...constainerRestaurantOwnerBG}}
-          onPress={ ()=> this.navigateToScreen(null) }>
+          onPress={ ()=> this.navigateToScreen(screens.CharityDetailsScreen) }>
           <Text style={subText}> {strings.iRunA} </Text>
           <Text style={mainText}> {strings.ngo} </Text>
         </TouchableOpacity>
