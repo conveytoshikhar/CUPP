@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native'
+import { View, StyleSheet, Text, TextInput, ImageBackground } from 'react-native'
 import { Card, Heading, Button } from '../Components'
 import { dimens, colors, customFonts } from '../constants'
 import { commonStyling } from '../common'
@@ -10,20 +10,21 @@ class TransactionDetailsScreen extends Component {
     super(props)
     this.state = {
       navigation: props.navigation,
-      name: 'Credit Card Enter Screen'
+      name: 'Transaction Details Screen'
     }
   }
   render() {
     const {
       mainContainer,
       headingStyle,
-      creditCardContainer,
+      itemDetailsContainer,
       buttonContainer,
       submitButton,
       cardNumberContainer,
       cardNumberInput,
       cardHeading,
-      cardSubHeading
+      cardSubHeading,
+      imageStyling
     } = styles
 
     const {
@@ -32,19 +33,19 @@ class TransactionDetailsScreen extends Component {
     return (
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Transaction' />
-        <View style={creditCardContainer}>
+        <View style={itemDetailsContainer}>
         <Text style={cardHeading}>Starbucks</Text>
         <Text style={cardSubHeading}>FOOD</Text>
           <Card
-            width={350}
-            height={220}
+            width= {350}
+            height={200}
             elevation={4}>
             <View>
-
-              <View style={cardNumberContainer}>
-                <TextInput style={cardNumberInput} />
-
-              </View>
+             <ImageBackground source={require('../assets/User/starbucks.jpg')} 
+             imageStyle={imageStyling}
+             style={imageStyling}  
+              >
+             </ImageBackground>
             </View>
           </Card>
         </View>
@@ -68,8 +69,8 @@ const styles = StyleSheet.create({
     color: colors.colorPrimary,
     marginTop: 20,
   },
-  creditCardContainer: {
-    marginTop: 40,
+  itemDetailsContainer: {
+    marginTop: 20,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
@@ -95,13 +96,19 @@ const styles = StyleSheet.create({
     fontFamily: customFonts.semiBold,
     textAlign: 'center',
     fontSize: 20,
-    paddingTop: 5
+    color: colors.colorPrimary
   },
   cardSubHeading: {
-    paddingBottom: 5,
-    paddingTop: 5,
+    paddingBottom: 8,
+    paddingTop: 8,
     fontFamily: customFonts.light,
     textAlign: 'center'
+  },
+  imageStyling: {
+    width: 350,
+    height: 200,
+    borderRadius: dimens.defaultBorderRadius,
+
   }
 })
 
