@@ -24,7 +24,12 @@ class TransactionDetailsScreen extends Component {
       cardNumberInput,
       cardHeading,
       cardSubHeading,
-      imageStyling
+      imageStyling,
+      priceDetailsContainer,
+      priceDetail,
+      priceValue,
+      priceType,
+      charityDetailsContainer
     } = styles
 
     const {
@@ -49,8 +54,26 @@ class TransactionDetailsScreen extends Component {
             </View>
           </Card>
         </View>
+        <View style = {priceDetailsContainer}>
+          <View style={priceDetail}>
+            <Text style={priceValue}>$ 3.26</Text>
+            <Text style= {priceType}>Price</Text>
+          </View>
+          <View style={priceDetail}>
+            <Text style={priceValue}>$ 4.00</Text>
+            <Text style={priceType}>Paid</Text>
+          </View>
+          <View style={priceDetail}>
+            <Text style={priceValue}>$ 0.74</Text>
+            <Text style={priceType}>Change</Text>
+          </View>
+        </View>
+        <View style = {charityDetailsContainer}>
+          
+        </View>
+
         <View style={buttonContainer}>
-          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' />
+          <Button style={submitButton} textColor={colors.colorAccent} title='Back' />
         </View>
       </View>
     );
@@ -73,6 +96,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center'
+  },
+  priceDetailsContainer: {
+    marginTop: 20,
+    width: '100%',
+    flexDirection:'row',
+    justifyContent: 'center'
+  },
+  charityDetailsContainer: {
+    marginTop: 20,
+    width: '100%',
+    flexDirection:'row',
     justifyContent: 'center'
   },
   buttonContainer: {
@@ -101,14 +136,26 @@ const styles = StyleSheet.create({
   cardSubHeading: {
     paddingBottom: 8,
     paddingTop: 8,
-    fontFamily: customFonts.light,
+    fontFamily: customFonts.regular,
     textAlign: 'center'
   },
   imageStyling: {
     width: 350,
     height: 200,
     borderRadius: dimens.defaultBorderRadius,
-
+  },
+  priceValue:{color:colors.colorPrimary, 
+    fontFamily:customFonts.medium, 
+    fontSize:20,
+    padding: 8
+  },
+  priceDetail: {
+  flex:1, 
+  alignItems:'center'
+  },
+  priceType: {
+    fontFamily:customFonts.semiBold, 
+    fontSize:15
   }
 })
 
