@@ -3,6 +3,9 @@ import { View, StyleSheet, Text, TouchableOpacity, ImageBackground} from 'react-
 import { colors, customFonts, strings } from '../constants'
 import { commonStyling } from '../common' 
 import {PropTypes} from 'prop-types'
+import {Utils} from '../utils'
+import screens from '../constants/screens';
+import appConfig from '../config/appConfig';
 
 class ClientCharityScreen extends Component {
   constructor(props){
@@ -12,6 +15,32 @@ class ClientCharityScreen extends Component {
       name: 'ClientCharityScreen'
     }
   }
+
+  navigateToScreen = async (screen) => {
+    // const user = firebase.auth().currentUser
+    // const uid = user.uid
+    // const userRef = firebase.firestore().collection(collectionNames.users)
+    // const supplierRef = firebase.firestore().collection(collectionNames.suppliers)
+
+    if(screen === screens.CreditCardEnterScreen) {
+      let role = appConfig.userRoleClient
+      // await userRef.doc(uid).update({
+      //   role: role
+      // })
+      // await supplierRef.doc(uid).set({
+      //   uid: uid,
+      //   clients: [],
+      //   inventory: []
+      // })
+    }else{
+      let role = appConfig.userRoleCharityOwner
+      await userRef.doc(uid).update({
+        role: role
+      })
+    }
+    Utils.dispatchScreen(screen, undefined, this.state.navigation);
+  }
+
   render() {
     const {
       mainContainer,
@@ -29,8 +58,7 @@ class ClientCharityScreen extends Component {
       <ImageBackground style={upperHalfContainer} source={require('../assets/Onboarding/supplier.jpg')}>
         <TouchableOpacity 
           style={{...textContainer,...containerSupplyBG}} 
-          onPress={() => this.navigateToScreen(screens.SupplierWelcomeScreen)}>
-
+          onPress={() => this.navigateToScreen(screens.CreditCardEnterScreen)}>
           <Text style={subText}> {strings.iWantTo}</Text>
           <Text style={mainText}> {strings.help} </Text>
         </TouchableOpacity>

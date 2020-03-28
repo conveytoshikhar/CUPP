@@ -1,7 +1,7 @@
 const appConfig = {
   DEBUG_MODE: false,
-  userRoleSupplier: 'Supplier',
-  userRoleRestaurantOwner: 'RestaurantOwner',
+  userRoleClient: 'Client',
+  userRoleCharityOwner: 'CharityOwner',
   googleCloudKey: 'AIzaSyAKaw5SaNSxbVgpknPT2zKQ-ZrXWBJ0zWo'
 }
 

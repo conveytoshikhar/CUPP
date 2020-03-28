@@ -3,7 +3,8 @@ const screens = {
   LoginScreen: 'LoginScreen',
   RegistrationScreen: 'RegistrationScreen',
   WelcomeScreen: 'WelcomeScreen',
-  ClientCharityScreen: 'ClientCharityScreen'
+  ClientCharityScreen: 'ClientCharityScreen',
+  CreditCardEnterScreen: 'CreditCardEnterScreen'
 }
 
 export default screens;

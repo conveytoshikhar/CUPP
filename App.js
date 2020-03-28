@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import SplashScreen from './screens/SplashScreen';
@@ -9,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import ClientCharityScreen from './screens/ClientCharityScreen';
+import CreditCardEnterScreen from './screens/CreditCardEnterScreen';
 
 const AppNavigator = createStackNavigator({
   SplashScreen: SplashScreen,
@@ -16,9 +16,10 @@ const AppNavigator = createStackNavigator({
   RegistrationScreen: RegistrationScreen, 
   WelcomeScreen: WelcomeScreen,
   ClientCharityScreen: ClientCharityScreen,
+  CreditCardEnterScreen: CreditCardEnterScreen
 },
   {
-    initialRouteName: screens.SplashScreen
+    initialRouteName: screens.CreditCardEnterScreen
   })
 
 const AppContainer = createAppContainer(AppNavigator);
