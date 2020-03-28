@@ -114,10 +114,6 @@ class LoginScreen extends Component {
                 textInputContainerStyle={textInputContainer} />
 
 
-              <TouchableOpacity onPress={() => navigation.navigate(screens.ForgotPasswordScreen)}>
-                <Text style={forgotPasswordText}> {strings.forgotPassword} </Text>
-              </TouchableOpacity>
-
               <Button
                 title={strings.login}
                 textColor={colors.colorAccent}

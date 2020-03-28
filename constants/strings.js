@@ -3,7 +3,6 @@ const strings = {
   namePlaceholderText: 'John Doe',
   passwordPlaceholderText: 'Enter your password',
   confirmPasswordPlaceholderText: 'Confirm your password',
-  registerWithKojo: 'Register With Kojo',
   fullNameSubHeading: 'Full Name',
   emailSubHeading: 'Email',
   passwordSubHeading: 'Password',
@@ -12,7 +11,7 @@ const strings = {
   termsAndConditions: 'Terms & Conditions',
   and: 'and',
   privacyPolicy: 'Privacy Policy',
-  registeringWithKojoHeadline: 'By registering you agree to Kojo\'s ',
+  registeringWithAppHeadline: 'By registering you agree to our',
   facebook: 'Facebook',
   google: 'Google',
   forgotPassword: 'Forgot Password?',
@@ -105,7 +104,8 @@ const strings = {
   itemToOrder: 'Items',
   findTheItemsToOrderBelow: 'Find the items to order below',
   yourOrder: 'Your Order',
-  findYourOrderBelow: 'Find your order below: '
+  findYourOrderBelow: 'Find your order below: ',
+  registerWithUs: 'Register With Us'
 }
 
 export default strings
