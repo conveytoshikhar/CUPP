@@ -1,17 +1,17 @@
-import firebase from "firebase/app"
+import firebase from "firebase"
 import "firebase/firestore"
 import "firebase/auth"
 
-var firebaseConfig = {
-    apiKey: "AIzaSyCqAVUpIHOv_mgfBqdVg3vR15zYwUXVEAA",
-    authDomain: "kojo-9861a.firebaseapp.com",
-    databaseURL: "https://kojo-9861a.firebaseio.com",
-    projectId: "kojo-9861a",
-    storageBucket: "kojo-9861a.appspot.com",
-    messagingSenderId: "824640030568",
-    appId: "1:824640030568:web:ceded41ff3476487bfb8dd",
-    measurementId: "G-CXQLBSB07C"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDueQMAfwUvjrvk6Bbbip2zj8u_KOq4ReI",
+  authDomain: "finspirehackathon.firebaseapp.com",
+  databaseURL: "https://finspirehackathon.firebaseio.com",
+  projectId: "finspirehackathon",
+  storageBucket: "finspirehackathon.appspot.com",
+  messagingSenderId: "593603447664",
+  appId: "1:593603447664:web:800205724fc1c6d035ddb5",
+  measurementId: "G-7VTS6M2D2H"
+};
 
 firebase.initializeApp(firebaseConfig)
 

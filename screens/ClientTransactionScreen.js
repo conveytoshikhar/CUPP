@@ -4,14 +4,42 @@ import { } from '../Components'
 import { dimens, colors } from '../constants'
 import { commonStyling } from '../common' 
 import {PropTypes} from 'prop-types'
+import firebase from '../config/firebase'
+
+
 
 class ClientTransactionScreen extends Component {
   constructor(props){
     super(props)
     this.state = {
-      navigation: props.navigation
+      navigation: props.navigation,
+      transactions: null
     }
   }
+
+  componentDidMount(){
+    this.getTransactionsFromFirebase()
+  }
+
+  getTransactionsFromFirebase =  async () => {
+    let transactionList = []
+    const db = firebase.firestore()
+    await db.collection('transactions')
+    .get()
+    .then(
+      function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          transactionList.push(doc.data())
+        })
+      }
+    )
+
+    this.setState({
+      transactions: transactionList
+    })
+
+  }
+
   render() {
     const {
       mainContainer
@@ -22,7 +50,8 @@ class ClientTransactionScreen extends Component {
     } = this.props
     return (
       <View style={mainContainer}>
-        <Text> Hello from transaction </Text>
+        <Text>Hello from transaction</Text>
+        <Text>{JSON.stringify(this.state.transactions)}</Text>
       </View>
     );
   }

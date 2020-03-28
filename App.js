@@ -14,6 +14,15 @@ import ClientWelcomeScreen from './screens/ClientWelcomeScreen';
 import ClientTransactionScreen from './screens/ClientTransactionScreen';
 import ClientHome from './screens/ClientHome';
 
+import { decode, encode } from 'base-64'
+global.crypto = require("@firebase/firestore");
+global.crypto.getRandomValues = byteArray => { for (let i = 0; i < byteArray.length; i++) { byteArray[i] = Math.floor(256 * Math.random()); } }
+
+if (!global.btoa) { global.btoa = encode; }
+
+if (!global.atob) { global.atob = decode; }
+
+
 const AppNavigator = createStackNavigator({
   SplashScreen: SplashScreen,
   LoginScreen: LoginScreen,
@@ -27,7 +36,7 @@ const AppNavigator = createStackNavigator({
   ClientHome: ClientHome
 },
   {
-    initialRouteName: screens.TransactionDetailsScreen
+    initialRouteName: screens.ClientHome
   })
 
 const AppContainer = createAppContainer(AppNavigator);
