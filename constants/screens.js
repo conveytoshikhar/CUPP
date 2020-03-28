@@ -2,7 +2,8 @@ const screens = {
   SplashScreen: 'SplashScreen',
   LoginScreen: 'LoginScreen',
   RegistrationScreen: 'RegistrationScreen',
-  WelcomeScreen: 'WelcomeScreen'
+  WelcomeScreen: 'WelcomeScreen',
+  ClientCharityScreen: 'ClientCharityScreen'
 }
 
 export default screens;

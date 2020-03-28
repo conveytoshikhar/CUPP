@@ -8,15 +8,17 @@ import * as Font from 'expo-font';
 import LoginScreen from './screens/LoginScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
+import ClientCharityScreen from './screens/ClientCharityScreen';
 
 const AppNavigator = createStackNavigator({
   SplashScreen: SplashScreen,
   LoginScreen: LoginScreen,
   RegistrationScreen: RegistrationScreen, 
-  WelcomeScreen: WelcomeScreen
+  WelcomeScreen: WelcomeScreen,
+  ClientCharityScreen: ClientCharityScreen,
 },
   {
-    initialRouteName: screens.WelcomeScreen
+    initialRouteName: screens.SplashScreen
   })
 
 const AppContainer = createAppContainer(AppNavigator);

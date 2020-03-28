@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native'
 import { LogoPlaceholder } from '../Components'
-import { dimens, colors } from '../constants'
-import { commonStyling } from '../common' 
+import { dimens, colors, screens } from '../constants'
+import { commonStyling } from '../common'
+import { NavigationActions, StackActions } from 'react-navigation'
 import { PropTypes } from 'prop-types'
 
 class SplashScreen extends Component {
@@ -12,6 +13,26 @@ class SplashScreen extends Component {
       navigation: props.navigation,
       name: 'Splash Screen'
     }
+  }
+  
+  componentDidMount = () => {
+    this.navigateToScreen()
+  }
+
+  navigateToScreen = () => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: screens.WelcomeScreen })
+      ]
+    })
+    const {
+      navigation
+    } = this.state
+
+    setTimeout( () => {
+      navigation.dispatch(resetAction)
+    }, 2000)
   }
   render() {
     const {

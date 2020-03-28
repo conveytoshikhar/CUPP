@@ -30,6 +30,7 @@ const strings = {
   viewClients: 'View Clients',
   iAmA: 'I am a',
   iOwnA:'I own a',
+  iRunA: 'I run a',
   supplier: 'Supplier',
   restaurant: 'Restaurant',
   loading: 'Loading, please wait...',
@@ -105,7 +106,10 @@ const strings = {
   findTheItemsToOrderBelow: 'Find the items to order below',
   yourOrder: 'Your Order',
   findYourOrderBelow: 'Find your order below: ',
-  registerWithUs: 'Register With Us'
+  registerWithUs: 'Register With Us',
+  iWantTo: 'I want to',
+  help: 'Help',
+  ngo: 'NGO'
 }
 
 export default strings

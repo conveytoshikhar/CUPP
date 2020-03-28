@@ -7,7 +7,7 @@ class WelcomeScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-
+      
     }
   }
 
@@ -16,13 +16,10 @@ class WelcomeScreen extends React.Component {
       mainContainer,
       backgroundStyle,
       contentContainer,
-      logo,
       loginButton,
       logoContainer,
       signUpButton,
-      signUpButtonText,
       buttonContainer,
-      loginButtonText
     } = styles
 
     const {
@@ -37,7 +34,7 @@ class WelcomeScreen extends React.Component {
           style={backgroundStyle}>
           <View style={contentContainer}>
             <View style={logoContainer}>
-              <LogoPlaceholder accent={colors.colorAccent} size={55} />
+              <LogoPlaceholder accent={colors.colorAccent} size={120} />
             </View>
             <View style={buttonContainer}>
               <OutlineButton
