@@ -13,6 +13,10 @@ class CreditCardEnterScreen extends Component {
       name: 'Credit Card Enter Screen'
     }
   }
+
+  onSubmitButtonPressed = () => {
+
+  }
   render() {
     const {
       mainContainer,
@@ -21,37 +25,70 @@ class CreditCardEnterScreen extends Component {
       buttonContainer,
       submitButton,
       cardNumberContainer,
-      cardNumberInput
+      cardNumberInput,
+      cardNumberOuterContainer,
+      cardNumberHeading,
+      cvvContainer,
+      nameInput
     } = styles
 
     const {
       navigation
     } = this.props
+    
     return (
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Hi, Enter your card details: ' />
         <View style={creditCardContainer}>
           <Card
             width={350}
-            height={220}
+            height={250}
             elevation={4}>
-            <View>
-              <Text>Card Number</Text>
+
+            <View style={cardNumberOuterContainer}>
+              <Text style={cardNumberHeading}>Name on Card</Text>
               <View style={cardNumberContainer}>
-                <TextInput style={cardNumberInput} />
+                <TextInput style={nameInput} secureTextEntry={false} placeholder='John Doe' />
+              </View>
+            </View>
+
+            <View style={cardNumberOuterContainer}>
+              <Text style={cardNumberHeading}>Card Number</Text>
+              <View style={cardNumberContainer}>
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
                 <Text>/</Text>
-                <TextInput />
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
                 <Text>/</Text>
-                <TextInput />
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
                 <Text>/</Text>
-                <TextInput />
-                <Text>/</Text>
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
+              </View>
+            </View>
+
+            <View style={cardNumberOuterContainer}>
+              <View style={cvvContainer}>
+                <View>
+                  <Text style={cardNumberHeading}>Expiry</Text>
+                  <View style={cardNumberContainer}>
+                    <TextInput style={cardNumberInput} maxLength={2} placeholder='12' />
+                    <Text>/</Text>
+                    <TextInput style={cardNumberInput} maxLength={4} placeholder='2022' />
+                  </View>
+                </View>
+
+                <View>
+                  <Text style={cardNumberHeading}>CVV</Text>
+                  <View style={cardNumberContainer}>
+                    <TextInput style={cardNumberInput} maxLength={3} secureTextEntry={true} placeholder='888' />
+                  </View>
+                </View>
+
               </View>
             </View>
           </Card>
         </View>
         <View style={buttonContainer}>
-          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' />
+          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' onPress={() => this.submitButtonPressed()}/>
         </View>
       </View>
     );
@@ -82,16 +119,56 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 40
   },
+  nameInput: {
+    width: '90%',
+    paddingBottom: 4,
+    paddingTop: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+    marginLeft: 8,
+    marginRight: 8,
+    textAlign: 'left',
+    fontSize: 20,
+    borderBottomColor: colors.grayTransluscent,
+    borderBottomWidth: 1,
+    fontFamily: customFonts.regular
+  },
   submitButton: {
     width: '90%',
     backgroundColor: colors.colorPrimary
   },
   cardNumberContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   cardNumberInput: {
-    width: 120,
+    width: 63,
+    paddingBottom: 4,
+    paddingTop: 4,
+    marginLeft: 8,
+    marginRight: 8,
+    textAlign: 'center',
+    fontSize: 20,
+    borderBottomColor: colors.grayTransluscent,
+    borderBottomWidth: 1,
     fontFamily: customFonts.regular
+  },
+  cvvContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    justifyContent: 'space-between'
+  },
+  cardNumberOuterContainer: {
+    marginTop: 18,
+    padding: 4
+  },
+  cardNumberHeading: {
+    fontSize: 14,
+    marginLeft: 12,
+    fontFamily: customFonts.medium,
+    color: colors.colorPrimary
   }
 })
 
