@@ -1,31 +1,74 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text} from 'react-native'
-import  { Heading, Card, Icon, Loading } from '../Components'
+import { View, StyleSheet, Text } from 'react-native'
+import { Heading, Card, Icon, Loading } from '../Components'
 import { dimens, colors, iconNames, customFonts, screens } from '../constants'
-import { commonStyling } from '../common' 
-import {PropTypes} from 'prop-types'
+import { commonStyling } from '../common'
+import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
 
 class CharityWelcomeScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       navigation: props.navigation,
-      isContenLoading: true
+      isContenLoading: true,
+      previousTransactionsArrayLength: 0,
+      lastTransaction: null
     }
   }
 
-  componentDidMount = () => {
-    this.fetchUserDetailsFromDB()
+  componentDidMount = async () => {
+    await this.fetchUserDetailsFromDB()
+    this.listenForDeposits()
+  }
+
+  listenForDeposits = async () => {
+    const user = firebase.auth().currentUser
+    const uid = user.uid
+    const charityOwnersRef = firebase.firestore().collection('charityOwners').doc(uid)
+    let flag = true
+    await charityOwnersRef.onSnapshot(doc => {
+      const newData = doc.data()
+      const {
+        previousTransactionsArrayLength
+      } = this.state
+      if (newData.transactions.length > previousTransactionsArrayLength && flag){
+        flag = false
+        const newLength = newData.transactions.length
+        const newTransaction = newData.transactions[newLength - 1]
+        const alertMessage = 'New deposit of '+newTransaction.name+' of amount '+newTransaction.amount+"!"
+        alert(alertMessage)
+        this.setState({
+          previousTransactionsArrayLength: newData.transactions.length,
+          lastTransaction: newTransaction
+        }, () => {
+          flag = true
+          this.onSuccessfulDeposit()
+        })
+      }
+    })
+  }
+
+  onSuccessfulDeposit = () => {
+    const {
+      lastTransaction,
+      amountReceived
+    } = this.state
+    
+    this.setState({
+      amountReceived: parseInt(amountReceived) + parseInt(lastTransaction.amount)
+    })
   }
 
   fetchUserDetailsFromDB = async () => {
     const user = firebase.auth().currentUser
     const uid = user.uid
     const charityRef = firebase.firestore().collection('charityOwners').doc(uid)
-    let amountReceived = null 
+    let amountReceived = null
     let helpers = null
     let transactionReceived = null
+    let previousTransactionsArrayLength = 0
+    let lastTransaction = null
 
     await charityRef.get().then(function (doc) {
       if (doc.exists) {
@@ -33,6 +76,10 @@ class CharityWelcomeScreen extends Component {
         amountReceived = data.amountReceived
         helpers = data.helpers
         transactionReceived = data.transactionReceived
+        previousTransactionsArrayLength = data.transactions.length
+        if (data.transactions.length) {
+          lastTransaction = data.transactions[data.transactions.length - 1]
+        }
       } else {
         console.log("No such document!");
       }
@@ -45,7 +92,8 @@ class CharityWelcomeScreen extends Component {
       amountReceived: amountReceived,
       helpers: helpers,
       transactionReceived: transactionReceived,
-      isContenLoading: false
+      isContenLoading: false,
+      previousTransactionsArrayLength: previousTransactionsArrayLength
     })
   }
 
@@ -68,11 +116,11 @@ class CharityWelcomeScreen extends Component {
     const {
       navigation
     } = this.props
-    const componentLoaded = 
+    const componentLoaded =
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Welcome' headingStyle={headingStyle} />
         <View style={personContainer}>
-          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={ () => navigation.navigate(screens.ProfileScreen)}  />
+          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={() => navigation.navigate(screens.ProfileScreen)} />
         </View>
 
         <View style={upperCardContainer}>
@@ -100,9 +148,9 @@ class CharityWelcomeScreen extends Component {
         </View>
       </View>
 
-      const componentLoading = <Loading />
-      
-      return this.state.isContenLoading ? componentLoading : componentLoaded
+    const componentLoading = <Loading />
+
+    return this.state.isContenLoading ? componentLoading : componentLoaded
   }
 }
 

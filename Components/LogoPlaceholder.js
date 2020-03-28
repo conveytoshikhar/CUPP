@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 import { dimens, colors, customFonts } from '../constants'
-import { Icon } from '../Components'
+import Icon from './Icon'
 import { PropTypes } from 'prop-types'
 
 const LogoPlaceholder = (props) => {
