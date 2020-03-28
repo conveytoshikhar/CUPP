@@ -1,21 +1,63 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TextInput } from 'react-native'
 import { Card, Heading, Button } from '../Components'
-import { dimens, colors, customFonts } from '../constants'
+import { dimens, colors, customFonts, screens } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
+import firebase from '../config/firebase'
+import { Utils } from '../utils';
 
 class CreditCardEnterScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
       navigation: props.navigation,
-      name: 'Credit Card Enter Screen'
+      nameEntered: '',
+      cvvEntered: '',
+      monthOfExpiryEntered: '',
+      yearOfExpiryEntered: '',
+      card1: '',
+      card2: '',
+      card3: '',
+      card4: '',
+      buttonLoading: false
     }
+
+    const user = firebase.auth().currentUser
+    const uid = user.uid
   }
 
-  onSubmitButtonPressed = () => {
 
+  onSubmitButtonPressed = async () => {
+    this.setState({buttonLoading: true})
+    const {
+      card1,
+      card2,
+      card3,
+      card4,
+      cvvEntered,
+      monthOfExpiryEntered,
+      yearOfExpiryEntered,
+      nameEntered
+    } = this.state
+
+    const expiryDate = monthOfExpiryEntered+'/'+yearOfExpiryEntered
+    const cardNumber = card1+'/'+card2+'/'+card3+'/'+card4
+
+    const user = firebase.auth().currentUser
+    const uid = user.uid
+    const clientRef = firebase.firestore().collection('clients')
+
+    await clientRef.doc(uid).update({
+      card: {
+        cardNumber: cardNumber,
+        nameOnCard: nameEntered,
+        expiryDate: expiryDate,
+        cvv: cvvEntered
+      }
+    })
+
+   Utils.dispatchScreen(screens.ClientHome, 100, this.state.navigation)
   }
   render() {
     const {
@@ -38,7 +80,7 @@ class CreditCardEnterScreen extends Component {
     
     return (
       <View style={mainContainer}>
-        <Heading headingStyle={headingStyle} title='Hi, Enter your card details: ' />
+        <Heading headingStyle={headingStyle} title='Add your Credit Card:' />
         <View style={creditCardContainer}>
           <Card
             width={350}
@@ -48,20 +90,20 @@ class CreditCardEnterScreen extends Component {
             <View style={cardNumberOuterContainer}>
               <Text style={cardNumberHeading}>Name on Card</Text>
               <View style={cardNumberContainer}>
-                <TextInput style={nameInput} secureTextEntry={false} placeholder='John Doe' />
+                <TextInput style={nameInput} secureTextEntry={false} placeholder='John Doe' onChangeText={ (text) => {this.setState({nameEntered: text})} } />
               </View>
             </View>
 
             <View style={cardNumberOuterContainer}>
               <Text style={cardNumberHeading}>Card Number</Text>
               <View style={cardNumberContainer}>
-                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' onChangeText={ (text) => {this.setState({card1: text})} }/>
                 <Text>/</Text>
-                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' onChangeText={ (text) => {this.setState({card2: text})} } />
                 <Text>/</Text>
-                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' onChangeText={ (text) => {this.setState({card3: text})} } />
                 <Text>/</Text>
-                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' />
+                <TextInput style={cardNumberInput} maxLength={4} placeholder='1234' onChangeText={ (text) => {this.setState({card4: text})} }/>
               </View>
             </View>
 
@@ -70,16 +112,16 @@ class CreditCardEnterScreen extends Component {
                 <View>
                   <Text style={cardNumberHeading}>Expiry</Text>
                   <View style={cardNumberContainer}>
-                    <TextInput style={cardNumberInput} maxLength={2} placeholder='12' />
+                    <TextInput style={cardNumberInput} maxLength={2} placeholder='12' onChangeText={ (text) => {this.setState({monthOfExpiryEntered: text})} }/>
                     <Text>/</Text>
-                    <TextInput style={cardNumberInput} maxLength={4} placeholder='2022' />
+                    <TextInput style={cardNumberInput} maxLength={4} placeholder='2022' onChangeText={ (text) => {this.setState({yearOfExpiryEntered: text})} }/>
                   </View>
                 </View>
 
                 <View>
                   <Text style={cardNumberHeading}>CVV</Text>
                   <View style={cardNumberContainer}>
-                    <TextInput style={cardNumberInput} maxLength={3} secureTextEntry={true} placeholder='888' />
+                    <TextInput style={cardNumberInput} maxLength={3} secureTextEntry={true} placeholder='888' onChangeText={ (text) => {this.setState({cvvEntered:text})} } />
                   </View>
                 </View>
 
@@ -88,7 +130,7 @@ class CreditCardEnterScreen extends Component {
           </Card>
         </View>
         <View style={buttonContainer}>
-          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' onPress={() => this.submitButtonPressed()}/>
+          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' onPress={this.onSubmitButtonPressed} isLoading={this.state.buttonLoading}/>
         </View>
       </View>
     );
