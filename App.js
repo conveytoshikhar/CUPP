@@ -5,12 +5,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 import SplashScreen from './screens/SplashScreen';
 import { screens } from './constants';
 import * as Font from 'expo-font';
+import LoginScreen from './screens/LoginScreen';
 
 const AppNavigator = createStackNavigator({
-  SplashScreen: SplashScreen
+  SplashScreen: SplashScreen,
+  LoginScreen: LoginScreen
 },
   {
-    initialRouteName: screens.SplashScreen
+    initialRouteName: screens.LoginScreen
   })
 
 const AppContainer = createAppContainer(AppNavigator);

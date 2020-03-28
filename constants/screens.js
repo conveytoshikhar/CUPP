@@ -1,5 +1,6 @@
 const screens = {
-  SplashScreen: 'SplashScreen'
+  SplashScreen: 'SplashScreen',
+  LoginScreen: 'LoginScreen'
 }
 
 export default screens;

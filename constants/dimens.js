@@ -9,7 +9,7 @@ const dimens = {
   screenDefaultMargin:15,
   screenSafeUpperNotchDistance: 30,
   defaultElevation: 5,
-  logoWidthOnboarding: 170,
+  logoWidthOnboarding: 220,
   logoHeightOnboarding: 170,
   thinLine: 1.2,
   inputTextBorderWidth: 0.7,
