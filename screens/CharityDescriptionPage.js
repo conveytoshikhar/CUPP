@@ -11,7 +11,7 @@ class CharityDescriptionPage extends Component {
     super(props)
     this.state = {
       navigation: props.navigation,
-      item: { id: '1', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' }
+      item: props.navigation.getParam('charity')
     }
   }
   render() {
@@ -36,7 +36,7 @@ class CharityDescriptionPage extends Component {
 
     return (
       <View style={mainContainer}>
-        <Icon nameAndroid={iconNames.backAndroid} nameIOS={iconNames.backIOS} style={backButton} color={colors.colorAccent} size={40} />
+        <Icon nameAndroid={iconNames.backAndroid} nameIOS={iconNames.backIOS} style={backButton} color={colors.colorAccent} size={40} onPress={ () => navigation.goBack()} />
         <View style={headerContainer}>
           <Text style={charityName}>{item.name}</Text>
           <Card width={220} height={220} elevation={4}>

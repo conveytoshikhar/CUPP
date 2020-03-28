@@ -27,7 +27,7 @@ const AppNavigator = createStackNavigator({
   CharityDescriptionPage: CharityDescriptionPage
 },
   {
-    initialRouteName: screens.CharityDescriptionPage
+    initialRouteName: screens.ClientHome
   })
 
 const AppContainer = createAppContainer(AppNavigator);

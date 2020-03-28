@@ -140,13 +140,18 @@ const CharityItem = (item, props) => {
               source={{ uri: 'sectionContent.imageURL' }} />
           </Card>
 
-          <TouchableOpacity onPress={ () => {props.navigation.navigate(screens.CharityDescriptionPage)}}>
+          <TouchableOpacity onPress={ () => {props.navigation.navigate(screens.CharityDescriptionPage, {
+            charity: item
+          })}}>
             <View style={textContainer}>
               <Text style={charityHeading}>{item.name}</Text>
               <Text style={charityDescription}>{item.shortDescription}</Text>
             </View>
           </TouchableOpacity>
-          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={ () => {props.navigation.navigate(screens.CharityDescriptionPage)} } />
+          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={ () => {props.navigation
+            .navigate(screens.CharityDescriptionPage, {
+              charity: item
+            })} } />
         </View>
       </Card>
     </View>
