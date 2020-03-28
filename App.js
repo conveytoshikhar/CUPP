@@ -13,6 +13,7 @@ import TransactionDetailsScreen from './screens/TransactionDetailsScreen'
 import ClientWelcomeScreen from './screens/ClientWelcomeScreen';
 import ClientTransactionScreen from './screens/ClientTransactionScreen';
 import ClientHome from './screens/ClientHome';
+import CharityDescriptionPage from './screens/CharityDescriptionPage';
 
 import { decode, encode } from 'base-64'
 global.crypto = require("@firebase/firestore");
@@ -33,7 +34,8 @@ const AppNavigator = createStackNavigator({
   TransactionDetailsScreen: TransactionDetailsScreen,
   ClientWelcomeScreen: ClientWelcomeScreen,
   ClientTransactionScreen: ClientTransactionScreen,
-  ClientHome: ClientHome
+  ClientHome: ClientHome,
+  CharityDescriptionPage: CharityDescriptionPage
 },
   {
     initialRouteName: screens.ClientHome

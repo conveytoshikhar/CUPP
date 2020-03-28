@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, FlatList, ImageBackground, TouchableOpacity} from 'react-native'
 import { Heading, Card, Icon } from '../Components'
-import { dimens, colors, iconNames, customFonts } from '../constants'
+import { dimens, colors, iconNames, customFonts, screens } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
 
@@ -97,11 +97,11 @@ const CharityItem = (item, props) => {
       alignItems: 'center',
       justifyContent: 'space-evenly',
       height: '100%',
-      padding: 18,
+      padding: 20,
       flexDirection: 'row'
     },
     textContainer: {
-      marginHorizontal: 18,
+      marginHorizontal: 20,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'flex-start'
@@ -133,20 +133,25 @@ const CharityItem = (item, props) => {
     <View style={charityItemOuterContainer}>
       <Card width='90%' height={120} elevation={4}>
         <View style={cardItemContainer}>
-          <Card width={75} height={75} elevation={dimens.defaultBorderRadius}>
+          <Card width={70} height={70} elevation={dimens.defaultBorderRadius}>
             <ImageBackground
               style={imageStyle}
               imageStyle={{ borderRadius: dimens.defaultBorderRadius }}
               source={{ uri: 'sectionContent.imageURL' }} />
           </Card>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={ () => {props.navigation.navigate(screens.CharityDescriptionPage, {
+            charity: item
+          })}}>
             <View style={textContainer}>
               <Text style={charityHeading}>{item.name}</Text>
               <Text style={charityDescription}>{item.shortDescription}</Text>
             </View>
           </TouchableOpacity>
-          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} />
+          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={ () => {props.navigation
+            .navigate(screens.CharityDescriptionPage, {
+              charity: item
+            })} } />
         </View>
       </Card>
     </View>
