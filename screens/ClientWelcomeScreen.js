@@ -157,6 +157,7 @@ const CharityItem = (item, props) => {
     textContainer: {
       marginHorizontal: 10,
       padding: 12,
+      width: 230,
       justifyContent: 'center',
       alignItems: 'space-evenly'
     },

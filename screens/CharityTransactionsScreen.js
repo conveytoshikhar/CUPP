@@ -94,7 +94,7 @@ const CharityItem = (item, props) => {
       marginHorizontal: 18,
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'flex-around',
+      alignItems: 'center',
     },
     charityHeading: {
       fontSize: 20,

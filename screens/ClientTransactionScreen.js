@@ -106,17 +106,17 @@ const CharityItem = (item, props) => {
     },
     textContainer: {
       marginHorizontal: 18,
-      flex: 1,
+      width: 280,
       justifyContent: 'center',
-      alignItems: 'flex-around',
+      alignItems: 'flex-start'
     },
     charityHeading: {
-      fontSize: 20,
+      fontSize: 18,
       fontFamily: customFonts.medium,
       color: colors.colorPrimary
     },
     charityDescription: {
-      fontSize: 14,
+      fontSize: 12,
       color: colors.black,
       marginTop: 8,
       fontFamily: customFonts.mediumItalic
@@ -137,7 +137,7 @@ const CharityItem = (item, props) => {
       <Card width='90%' height={120} elevation={4} style={{flex:1}}>
         <View style={cardItemContainer}>
           <View style = {{flex:2}}>
-          <Card width={70} height={70} elevation={dimens.defaultBorderRadius} >
+          <Card width={60} height={60} elevation={dimens.defaultBorderRadius} >
             <ImageBackground
               style={imageStyle}
               imageStyle={{ borderRadius: dimens.defaultBorderRadius }}

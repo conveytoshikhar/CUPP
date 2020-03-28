@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, Text, ImageBackground, Modal,   TouchableOpacity, TouchableWithoutFeedback,} from 'react-native'
+import { View, StyleSheet, Image, Text, ImageBackground, Modal, TouchableOpacity, TouchableWithoutFeedback, } from 'react-native'
 import { Icon, Card, Button, Cross, InputWithSubHeading } from '../Components'
-import { dimens, colors, iconNames, customFonts } from '../constants'
+import { dimens, colors, iconNames, customFonts, screens } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
 import { ScrollView } from 'react-native-gesture-handler';
+import { Utils } from '../utils';
 
 class CharityDescriptionPage extends Component {
   constructor(props) {
@@ -24,10 +25,10 @@ class CharityDescriptionPage extends Component {
     })
   }
 
-  closeDonateModal = () => { 
-    this.setState({  
-    donateModalVisible: false 
-    }) 
+  closeDonateModal = () => {
+    this.setState({
+      donateModalVisible: false
+    })
   }
 
   render() {
@@ -53,11 +54,11 @@ class CharityDescriptionPage extends Component {
 
     return (
       <View style={mainContainer}>
-        <Icon nameAndroid={iconNames.backAndroid} nameIOS={iconNames.backIOS} style={backButton} color={colors.colorAccent} size={40} onPress={ () => navigation.goBack()} />
+        <Icon nameAndroid={iconNames.backAndroid} nameIOS={iconNames.backIOS} style={backButton} color={colors.colorAccent} size={40} onPress={() => navigation.goBack()} />
         <View style={headerContainer}>
           <Text style={charityName}>{item.charityName}</Text>
           <Card width={220} height={220} elevation={4}>
-          <ImageBackground
+            <ImageBackground
               style={imageStyle}
               imageStyle={{ borderRadius: dimens.defaultBorderRadius }}
               source={{ uri: item.charityImageURL }} />
@@ -71,85 +72,93 @@ class CharityDescriptionPage extends Component {
           </Text>
         </ScrollView>
         <View style={buttonContainer}>
-          <Button title='Donate' style={submitButton} style={submitButton} onPress = {this.showDonateModal} textColor={colors.colorAccent} />
+          <Button title='Donate' style={submitButton} style={submitButton} onPress={this.showDonateModal} textColor={colors.colorAccent} />
         </View>
         {this.getDonateModal()}
       </View>
     );
-}
-
-uploadTransaction = async () => {
-  const {
-    item,
-    donationAmount
-  } = this.state
-  const user = firebase.auth().currentUser
-  const charityRef = firebase.firestore().collection('charityOwners')
-  const transaction = {
-    name: firebase.auth().currentUser.displayName,
-    amount: donationAmount
   }
-  await charityRef.doc(item.uid).update({
-    transactions: firebase.firestore.FieldValue.arrayUnion(transaction)
-  })
-  alert('Added')
 
-}
+  uploadTransaction = async () => {
+    const {
+      item,
+      donationAmount
+    } = this.state
+    const user = firebase.auth().currentUser
+    const charityRef = firebase.firestore().collection('charityOwners')
+    const transaction = {
+      name: firebase.auth().currentUser.displayName,
+      amount: donationAmount,
+      id: item.uid+ Math.floor(Math.random() * 1000000000)
+    }
+    await charityRef.doc(item.uid).update({
+      transactions: firebase.firestore.FieldValue.arrayUnion(transaction)
+    })
+    .then(() => {
+      alert('Added')
+      this.closeDonateModal()
+      Utils.dispatchScreen(screens.ClientHome, 100, this.state.navigation)
+    })
+    .catch(err => {
+      alert(err)
+    })
 
-setDonationAmount = (text) => {
-  this.setState({
-    donationAmount: parseInt(text)
-  })
-}
+  }
 
-getDonateModal = () => {
-  const {
-    modalContentContainerStyle,
-    modalContainerStyle,
-    crossStyle,
-    textContainerModal,
-    headingModalStyle,
-    itemNameModal,
-    deleteButtonModal,
-    cancelButtonModal,
-    subHeadingStyle,
-    submitButton
-  } = styles
+  setDonationAmount = (text) => {
+    this.setState({
+      donationAmount: parseInt(text)
+    })
+  }
 
-  return (
-    <Modal visible={this.state.donateModalVisible} transparent={true} animationType='slide' onBackButtonPress={this.closeDonateModal}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPressOut={this.closeDonateModal}
-        style={modalContainerStyle}>
-        <TouchableWithoutFeedback>
-          <View style={modalContentContainerStyle}>
-            <Cross style={crossStyle} onPress={this.closeDonateModal} color={colors.grayBlue} size={42} onPress={this.closeDonateModal} />
-            <View style={textContainerModal}>
-              <Text style={headingModalStyle}>Donate to</Text>
-              <Text numberOfLines={1} ellipsizeMode='tail' style={itemNameModal}>{this.state.item.charityName}</Text>
+  getDonateModal = () => {
+    const {
+      modalContentContainerStyle,
+      modalContainerStyle,
+      crossStyle,
+      textContainerModal,
+      headingModalStyle,
+      itemNameModal,
+      deleteButtonModal,
+      cancelButtonModal,
+      subHeadingStyle,
+      submitButton
+    } = styles
+
+    return (
+      <Modal visible={this.state.donateModalVisible} transparent={true} animationType='slide' onBackButtonPress={this.closeDonateModal}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPressOut={this.closeDonateModal}
+          style={modalContainerStyle}>
+          <TouchableWithoutFeedback>
+            <View style={modalContentContainerStyle}>
+              <Cross style={crossStyle} onPress={this.closeDonateModal} color={colors.grayBlue} size={42} onPress={this.closeDonateModal} />
+              <View style={textContainerModal}>
+                <Text style={headingModalStyle}>Donate to</Text>
+                <Text numberOfLines={1} ellipsizeMode='tail' style={itemNameModal}>{this.state.item.charityName}</Text>
+              </View>
+              <InputWithSubHeading
+                secureTextEntry={false}
+                placeholder="Amount"
+                autoCorrect={false}
+                autoCompleteType='name'
+                subHeadingTitle="Enter the amount (Minimum donation of $1)"
+                autoCapitalize='words'
+                onChangeText={this.setDonationAmount}
+                subHeadingStyle={subHeadingStyle} />
+              <Button
+                title='Pay for good!'
+                textColor={colors.colorAccent}
+                onPress={this.uploadTransaction}
+                style={deleteButtonModal} />
+
             </View>
-            <InputWithSubHeading
-            secureTextEntry={false}
-            placeholder= "Amount"
-            autoCorrect={false}
-            autoCompleteType='name'
-            subHeadingTitle= "Enter the amount (Minimum donation of $1)"
-            autoCapitalize='words'
-            onChangeText={this.setDonationAmount}
-            subHeadingStyle={subHeadingStyle} />
-            <Button
-              title='Pay for good!'
-              textColor={colors.colorAccent}
-              onPress={this.uploadTransaction}
-              style={deleteButtonModal} />
-      
-          </View>
-        </TouchableWithoutFeedback>
-      </TouchableOpacity>
-    </Modal>
-  )
-}
+          </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      </Modal>
+    )
+  }
 
 }
 

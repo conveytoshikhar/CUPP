@@ -60,6 +60,7 @@ class App extends Component {
       fontLoaded: false,
       isAppReady: false
     }
+    console.disableYellowBox = true
   }
 
   async componentDidMount() {

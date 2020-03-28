@@ -106,7 +106,7 @@ class CharityDetailsScreen extends Component {
     this.setState({
       showLoadingDialog: false
     })
-    Utils.dispatchScreen(screens.ProfileScreen, 100, this.state.navigation)
+    Utils.dispatchScreen(screens.CharityHome, 100, this.state.navigation)
   }
 
   render() {
@@ -115,19 +115,11 @@ class CharityDetailsScreen extends Component {
       headingStyle,
       inputsContainer,
       subHeadingStyle,
-      headingContainerStyle,
-      allInputsContainer,
-      categoryInputContainer,
-      categoryContainer,
-      categoryTextStyle,
-      inputContainerStyle,
       addImageContainer,
       imageContainer,
       imageStyle,
       addButtonStyle,
       buttonContainer,
-      errorStyle,
-      subTextStyle,
       imageContainerStlye
     } = styles
 

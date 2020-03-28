@@ -26,14 +26,12 @@ class CharityWelcomeScreen extends Component {
     const user = firebase.auth().currentUser
     const uid = user.uid
     const charityOwnersRef = firebase.firestore().collection('charityOwners').doc(uid)
-    let flag = true
     await charityOwnersRef.onSnapshot(doc => {
       const newData = doc.data()
       const {
         previousTransactionsArrayLength
       } = this.state
-      if (newData.transactions.length > previousTransactionsArrayLength && flag){
-        flag = false
+      if (newData.transactions.length > previousTransactionsArrayLength){
         const newLength = newData.transactions.length
         const newTransaction = newData.transactions[newLength - 1]
         const alertMessage = 'New deposit of '+newTransaction.name+' of amount '+newTransaction.amount+"!"
@@ -42,7 +40,6 @@ class CharityWelcomeScreen extends Component {
           previousTransactionsArrayLength: newData.transactions.length,
           lastTransaction: newTransaction
         }, () => {
-          flag = true
           this.onSuccessfulDeposit()
         })
       }
