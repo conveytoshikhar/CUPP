@@ -90,7 +90,7 @@ class TransactionDetailsScreen extends Component {
           </View>
               )
             })
-          }} */}
+          }}() */}
           <View style={charityDetail}>
             <Text style={charityName}>Team Trees</Text>
             <Text style={charityPrice}>$ 0.30</Text>
