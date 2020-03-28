@@ -74,7 +74,7 @@ class ClientWelcomeScreen extends Component {
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Welcome' heading />
         <View style={personContainer}>
-          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} />
+          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={ () => navigation.navigate(screens.ProfileScreen)}  />
         </View>
 
         <View style={upperCardContainer}>

@@ -41,8 +41,7 @@ class ProfileScreen extends Component {
       signOutButton,
       scrollView,
       rowContainer,
-      editIcon,
-      editIconText
+      backIcon,
     } = styles
 
     const {
@@ -53,6 +52,7 @@ class ProfileScreen extends Component {
 
     const mainContent =
       <View style={mainContainer}>
+        <Icon style={backIcon} nameAndroid={iconNames.backAndroid} nameIOS={iconNames.backIOS} color={colors.colorAccent} size={33} onPress={() => navigation.goBack()} />
         <View style={headerContainer}>
           <LinearGradient
             colors={[colors.colorPrimary, colors.colorSecondary]}
@@ -96,6 +96,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 280
+  },
+  backIcon: {
+    position: 'absolute',
+    top: 40,
+    left: dimens.screenHorizontalMargin
   },
   headerContainer: {
     zIndex: -1,

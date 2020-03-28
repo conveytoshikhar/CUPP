@@ -78,7 +78,6 @@ class LoginScreen extends Component {
 
   onSuccessfulLogin = async () => {
     //login has been enabled, check here for the missing props of user and redirect accordingly
-    console.log('On successfulk lofin called')
     const user = firebase.auth().currentUser
     const firestore = firebase.firestore()
     const userRef = firestore.collection('users')
