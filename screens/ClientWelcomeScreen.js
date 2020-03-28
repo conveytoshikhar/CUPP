@@ -83,7 +83,7 @@ class ClientWelcomeScreen extends Component {
 
               <View style={denominationContainer}>
                 <Text style={denomination}>{this.state.charitableAmount}</Text>
-                <Text style={denominationSubHeading}>Total Avaiable Charitable Amount</Text>
+                <Text style={denominationSubHeading}>Total Available Charitable Amount</Text>
               </View>
 
               <View style={innerProfileLowerCardContainer}>
@@ -104,7 +104,6 @@ class ClientWelcomeScreen extends Component {
 
         {/* FLAT LIST */}
         <Heading title='Charities that need help: ' headingStyle={charitiesHeading} />
-
         <FlatList
           contentContainerStyle={{ paddingTop: 20 }}
           data={this.state.charityList}

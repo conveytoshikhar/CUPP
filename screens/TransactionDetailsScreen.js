@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TextInput, ImageBackground } from 'react-native'
-import { Card, Heading, Button } from '../Components'
-import { dimens, colors, customFonts } from '../constants'
+import { Card, Heading, Button, Icon } from '../Components'
+import { dimens, colors, iconNames, customFonts} from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
 
@@ -10,7 +10,8 @@ class TransactionDetailsScreen extends Component {
     super(props)
     this.state = {
       navigation: props.navigation,
-      name: 'Transaction Details Screen'
+      name: 'Transaction',
+      item: props.navigation.getParam('transaction')
     }
   }
   render() {
@@ -32,24 +33,32 @@ class TransactionDetailsScreen extends Component {
       charityDetailsContainer,
       charityDetail,
       charityName,
-      charityPrice
+      charityPrice,
+      backButton
     } = styles
 
     const {
       navigation
     } = this.props
+
+    const {
+      name,
+      item
+    } = this.state
     return (
       <View style={mainContainer}>
-        <Heading headingStyle={headingStyle} title='Transaction' />
+      <View>
+      <Heading headingStyle={headingStyle} title= {name} />
+      </View>
         <View style={itemDetailsContainer}>
-        <Text style={cardHeading}>Starbucks</Text>
-        <Text style={cardSubHeading}>Food</Text>
+        <Text style={cardHeading}>{item.name}</Text>
+        <Text style={cardSubHeading}>{item.category}</Text>
           <Card
             width= {350}
             height={200}
             elevation={4}>
             <View>
-             <ImageBackground source={require('../assets/User/starbucks.jpg')} 
+             <ImageBackground source={{ uri : item.transactionScreenImageURL}} 
              imageStyle={imageStyling}
              style={imageStyling}  
               >
@@ -59,15 +68,15 @@ class TransactionDetailsScreen extends Component {
         </View>
         <View style = {priceDetailsContainer}>
           <View style={priceDetail}>
-            <Text style={priceValue}>$ 3.26</Text>
+            <Text style={priceValue}>{item.price}</Text>
             <Text style= {priceType}>Price</Text>
           </View>
           <View style={priceDetail}>
-            <Text style={priceValue}>$ 4.00</Text>
+            <Text style={priceValue}>{item.amountPaid}</Text>
             <Text style={priceType}>Paid</Text>
           </View>
           <View style={priceDetail}>
-            <Text style={priceValue}>$ 0.74</Text>
+            <Text style={priceValue}>{item.change}</Text>
             <Text style={priceType}>Change</Text>
           </View>
         </View>
@@ -85,6 +94,9 @@ class TransactionDetailsScreen extends Component {
             <Text style={charityPrice}>$ 0.24</Text>
           </View>
         </View>
+        <View style={buttonContainer}>
+          <Button style={submitButton} textColor={colors.colorAccent} title='Back' onPress={()  => { navigation.goBack()}} isLoading={this.state.buttonLoading}/>
+        </View>
       </View>
     );
   }
@@ -100,7 +112,7 @@ const styles = StyleSheet.create({
   headingStyle: {
     fontSize: 25,
     color: colors.colorPrimary,
-    marginTop: 20,
+    marginTop:30
   },
   itemDetailsContainer: {
     marginTop: 35,
@@ -182,6 +194,11 @@ const styles = StyleSheet.create({
   charityPrice:{
     fontFamily:customFonts.semiBold, 
     fontSize:15
+  },
+  backButton: {
+    top: 40,
+
+    left: dimens.screenHorizontalMargin
   }
 })
 
