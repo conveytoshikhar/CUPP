@@ -12,21 +12,37 @@ class ClientWelcomeScreen extends Component {
     this.state = {
       navigation: props.navigation,
       isContenLoading: true,
-      charityList: [{ id: '0', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' },
-      { id: '1', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' },
-      { id: '2', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' }]
+      charityList: []
     }
   }
 
   componentDidMount = () => {
     this.fetchUserDetailsFromDB()
+    this.fetchCharitiesFromDB()
+  }
+
+  fetchCharitiesFromDB = async () => {
+    const charityRef = firebase.firestore().collection('charityOwners')
+    let charitiesList = []
+    await charityRef
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          // doc.data() is never undefined for query doc snapshots
+          charitiesList.push(doc.data())
+        });
+      })
+    this.setState({
+      charityList: charitiesList,
+      isContenLoading: false
+    })
   }
 
   fetchUserDetailsFromDB = async () => {
     const user = firebase.auth().currentUser
     const uid = user.uid
     const clientRef = firebase.firestore().collection('clients').doc(uid)
-    let charitableAmount = null 
+    let charitableAmount = null
     let charitiesHelped = null
     let transactionsMade = null
 
@@ -74,7 +90,7 @@ class ClientWelcomeScreen extends Component {
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Welcome' headingStyle={headingStyle} />
         <View style={personContainer}>
-          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={ () => navigation.navigate(screens.ProfileScreen)}  />
+          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={() => navigation.navigate(screens.ProfileScreen)} />
         </View>
 
         <View style={upperCardContainer}>
@@ -108,7 +124,7 @@ class ClientWelcomeScreen extends Component {
           contentContainerStyle={{ paddingTop: 20 }}
           data={this.state.charityList}
           renderItem={({ item }) => CharityItem(item, this.props)}
-          keyExtractor={(item) => item.id} />
+          keyExtractor={(item) => item.uid} />
       </View>
 
     const componentLoading = <Loading />
@@ -139,18 +155,18 @@ const CharityItem = (item, props) => {
       flexDirection: 'row'
     },
     textContainer: {
-      marginHorizontal: 20,
-      flex: 1,
+      marginHorizontal: 10,
+      padding: 12,
       justifyContent: 'center',
-      alignItems: 'flex-start'
+      alignItems: 'space-evenly'
     },
     charityHeading: {
-      fontSize: 20,
+      fontSize: 16,
       fontFamily: customFonts.medium,
       color: colors.colorPrimary
     },
     charityDescription: {
-      fontSize: 14,
+      fontSize: 12,
       color: colors.black,
       marginTop: 8,
       fontFamily: customFonts.mediumItalic
@@ -175,7 +191,7 @@ const CharityItem = (item, props) => {
             <ImageBackground
               style={imageStyle}
               imageStyle={{ borderRadius: dimens.defaultBorderRadius }}
-              source={{ uri: 'sectionContent.imageURL' }} />
+              source={{ uri: item.charityImageURL }} />
           </Card>
 
           <TouchableOpacity onPress={() => {
@@ -184,8 +200,8 @@ const CharityItem = (item, props) => {
             })
           }}>
             <View style={textContainer}>
-              <Text style={charityHeading}>{item.name}</Text>
-              <Text style={charityDescription}>{item.shortDescription}</Text>
+              <Text style={charityHeading}>{item.charityName}</Text>
+              <Text style={charityDescription}>{item.charityDescription}</Text>
             </View>
           </TouchableOpacity>
           <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={() => {
