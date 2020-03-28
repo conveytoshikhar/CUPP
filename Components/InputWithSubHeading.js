@@ -33,7 +33,9 @@ const InputWithSubHeading = (props) => {
     containerStyle,
     inputValue,
     errorTitle,
-    editable
+    editable,
+    multiline,
+    numberOfLines
   } = props
 
   const subHeadingStyling = {
@@ -57,7 +59,6 @@ const InputWithSubHeading = (props) => {
     ...inputContainerStyle,
     borderBottomColor: errorStatus ? colors.errorRed : colors.blackTransluscent
   }
-
   const component =
     <View style={containerStyle}>
       <View style={subHeadingContainerStyle}>
@@ -75,6 +76,8 @@ const InputWithSubHeading = (props) => {
           autoCorrect={autoCorrect ? autoCorrect : true}
           onChangeText={onChangeText}
           value={inputValue}
+          multiline={multiline ? multiline : false}
+          numberOfLines={numberOfLines ? numberOfLines : 1 }
           keyboardType={keyboardType ? keyboardType : 'default'}
           autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
           placeholderTextColor={colors.grayTransluscent}

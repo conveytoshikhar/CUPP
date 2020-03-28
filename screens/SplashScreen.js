@@ -24,8 +24,7 @@ class SplashScreen extends Component {
   navigateToScreen = async () => {
     const user = firebase.auth().currentUser
     const userRef = firebase.firestore().collection('users')
-    const clientRef = firebase.firestore().collection('clients')
-    const charityRef = firebase.firestore().collection('charityOwners')
+
     if(user) {
       const uid = user.uid
       let role = null
@@ -57,6 +56,19 @@ class SplashScreen extends Component {
         }, 2000)
       }else{
         //go here to charity page 
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: screens.CharityHome })
+          ]
+        })
+        const {
+          navigation
+        } = this.state
+    
+        setTimeout( () => {
+          navigation.dispatch(resetAction)
+        }, 2000)
       }
     }else{
       const resetAction = StackActions.reset({

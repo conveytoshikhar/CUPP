@@ -1,41 +1,27 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, FlatList, ImageBackground, TouchableOpacity} from 'react-native'
 import { Heading, Card, Icon } from '../Components'
-import { dimens, colors, iconNames, customFonts, screens } from '../constants'
+import { dimens, colors, iconNames, customFonts } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
 
 
-class ClientTransactionScreen extends Component {
+class CharityTransactionScreen extends Component {
   constructor(props){
     super(props)
     this.state = {
       navigation: props.navigation,
       transactions: null,
-      transactionList: [{id:0 , name: 'Starbucks', category: 'Food', amountPaid:'$ 4.00', change: '$ 0.74', price: '$ 3.26', imageURL:'https://illuminatisymbols.info/wp-content/uploads/illuminati-symbols-Starbucks-Coffee-Logo.gif' , 
-      transactionScreenImageURL: 'https://images.pexels.com/photos/597933/pexels-photo-597933.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
-    },
-      {id:1 , name: 'Park N Shop', category: 'Shopping', amountPaid:'$ 100.00', change: '$ 0.34', price: '$ 99.66' ,imageURL:'https://media.glassdoor.com/sqll/974481/parknshop-squarelogo-1507201008337.png', 
-      transactionScreenImageURL: 'https://cms.qz.com/wp-content/uploads/2013/10/park1.jpg?quality=75&strip=all&w=1600&h=900&crop=1',
-      charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
-    },
-      {id:2 , name: 'McDonalds', category: 'Food', amountPaid:'$ 35.00', change: '$ 0.56', price: '$ 34.44' ,imageURL:'https://i.pinimg.com/originals/85/0b/d3/850bd3e6e82be4f4208b0ba99edeb96b.jpg', 
-      transactionScreenImageURL: 'https://cms.qz.com/wp-content/uploads/2017/07/mcdonalds.jpg?quality=75&strip=all&w=1600&h=900&crop=1',
-      charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
-    },
-      {id:3 , name: 'Sasa', category: 'Shopping', amountPaid:'$ 102.00', change: '$ 0.99', price: '$ 101.01' ,imageURL:'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg',
-       transactionScreenImageURL: 'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg',
-       charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
-      }
-      
-      ]
+      transactionList: [{id:0 , name: 'Starbucks', category: 'Food', amountPaid:'$ 4.00', change: '$ 0.74', imageURL:'https://illuminatisymbols.info/wp-content/uploads/illuminati-symbols-Starbucks-Coffee-Logo.gif'},
+      {id:1 , name: 'Park N Shop', category: 'Shopping', amountPaid:'$ 100.00', change: '$ 0.34', imageURL:'https://media.glassdoor.com/sqll/974481/parknshop-squarelogo-1507201008337.png'},
+      {id:2 , name: 'McDonalds', category: 'Food', amountPaid:'$ 35.00', change: '$ 0.56', imageURL:'https://i.pinimg.com/originals/85/0b/d3/850bd3e6e82be4f4208b0ba99edeb96b.jpg'},
+      {id:3 , name: 'Sasa', category: 'Shopping', amountPaid:'$ 102.00', change: '$ 0.99', imageURL:'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg'}]
     }
   }
 
   componentDidMount(){
-    //this.getTransactionsFromFirebase()
+    this.getTransactionsFromFirebase()
   }
 
   getTransactionsFromFirebase =  async () => {
@@ -136,40 +122,23 @@ const CharityItem = (item, props) => {
     <View style={charityItemOuterContainer}>
       <Card width='90%' height={120} elevation={4} style={{flex:1}}>
         <View style={cardItemContainer}>
-          <View style = {{flex:2}}>
-          <Card width={70} height={70} elevation={dimens.defaultBorderRadius} >
+          <Card width={75} height={75} elevation={dimens.defaultBorderRadius} style={{flex:1}}>
             <ImageBackground
               style={imageStyle}
               imageStyle={{ borderRadius: dimens.defaultBorderRadius }}
               source={{uri : item.imageURL}}
              />
           </Card>
-          </View>
-          <TouchableOpacity style={{flex:5}}
-          onPress={() => {
-            props.navigation.navigate(screens.TransactionDetailsScreen, {
-              transaction: item
-            })
-          }}
-          >
+          <TouchableOpacity style={{flex:1}}>
             <View style={textContainer}>
               <Text style={charityHeading}>{item.name}</Text>
               <Text style={charityDescription}>{item.category}</Text>
             </View>
           </TouchableOpacity>
-          <View style={{flex:3}}>
+          <View>
             <Text style={charityHeading}>{item.amountPaid}</Text>
             <Text style={charityDescription}>{item.change}</Text>
           </View>
-          <View style={{flex:1}}>
-          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={() => {
-            props.navigation
-              .navigate(screens.TransactionDetailsScreen, {
-                transaction: item
-              })
-            }}/>
-            </View>
-
         </View>
       </Card>
     </View>
@@ -270,12 +239,12 @@ const styles = StyleSheet.create({
 
 })
 
-ClientTransactionScreen.navigationOptions = {
+CharityTransactionScreen.navigationOptions = {
   header: null
 }
 
-ClientTransactionScreen.propTypes = {
+CharityTransactionScreen.propTypes = {
   navigation: PropTypes.object
 }
 
-export default ClientTransactionScreen
+export default CharityTransactionScreen

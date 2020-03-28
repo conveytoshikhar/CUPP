@@ -80,7 +80,6 @@ class RegistrationScreen extends Component {
       passwordEntered,
     } = this.state
 
-    console.log(this.state)
 
     firebase
       .auth()

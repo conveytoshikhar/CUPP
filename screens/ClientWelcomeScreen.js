@@ -72,7 +72,7 @@ class ClientWelcomeScreen extends Component {
     } = this.props
     const componenetWhenLoaded =
       <View style={mainContainer}>
-        <Heading headingStyle={headingStyle} title='Welcome' heading />
+        <Heading headingStyle={headingStyle} title='Welcome' headingStyle={headingStyle} />
         <View style={personContainer}>
           <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={ () => navigation.navigate(screens.ProfileScreen)}  />
         </View>
