@@ -12,6 +12,7 @@ import CreditCardEnterScreen from './screens/CreditCardEnterScreen';
 import ClientWelcomeScreen from './screens/ClientWelcomeScreen';
 import ClientTransactionScreen from './screens/ClientTransactionScreen';
 import ClientHome from './screens/ClientHome';
+import CharityDescriptionPage from './screens/CharityDescriptionPage';
 
 const AppNavigator = createStackNavigator({
   SplashScreen: SplashScreen,
@@ -22,10 +23,11 @@ const AppNavigator = createStackNavigator({
   CreditCardEnterScreen: CreditCardEnterScreen,
   ClientWelcomeScreen: ClientWelcomeScreen,
   ClientTransactionScreen: ClientTransactionScreen,
-  ClientHome: ClientHome
+  ClientHome: ClientHome,
+  CharityDescriptionPage: CharityDescriptionPage
 },
   {
-    initialRouteName: screens.ClientHome
+    initialRouteName: screens.CharityDescriptionPage
   })
 
 const AppContainer = createAppContainer(AppNavigator);

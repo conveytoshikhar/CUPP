@@ -7,7 +7,8 @@ const screens = {
   CreditCardEnterScreen: 'CreditCardEnterScreen',
   ClientWelcomeScreen: 'ClientWelcomeScreen',
   ClientTransactionScreen: 'ClientTransactionScreen',
-  ClientHome: 'ClientHome'
+  ClientHome: 'ClientHome',
+  CharityDescriptionPage: 'CharityDescriptionPage'
 }
 
 export default screens;
