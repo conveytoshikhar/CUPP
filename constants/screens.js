@@ -5,7 +5,10 @@ const screens = {
   WelcomeScreen: 'WelcomeScreen',
   ClientCharityScreen: 'ClientCharityScreen',
   CreditCardEnterScreen: 'CreditCardEnterScreen',
-  TransactionDetailsScreen: 'TransactionDetailsScreen'
+  TransactionDetailsScreen: 'TransactionDetailsScreen',
+  ClientWelcomeScreen: 'ClientWelcomeScreen',
+  ClientTransactionScreen: 'ClientTransactionScreen',
+  ClientHome: 'ClientHome'
 }
 
 export default screens;

@@ -12,7 +12,9 @@ const iconNames = {
   checkIOS: 'ios-checkmark',
   checkAndroid: 'md-checkmark',
   removeIOS: 'ios-remove',
-  removeAndroid: 'md-remove'
+  removeAndroid: 'md-remove',
+  personIOS: 'ios-person',
+  personAndroid: 'md-person'
 }
 
 export default iconNames
