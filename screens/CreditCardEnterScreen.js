@@ -13,6 +13,10 @@ class CreditCardEnterScreen extends Component {
       name: 'Credit Card Enter Screen'
     }
   }
+
+  onSubmitButtonPressed = () => {
+
+  }
   render() {
     const {
       mainContainer,
@@ -31,6 +35,7 @@ class CreditCardEnterScreen extends Component {
     const {
       navigation
     } = this.props
+    
     return (
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Hi, Enter your card details: ' />
@@ -83,7 +88,7 @@ class CreditCardEnterScreen extends Component {
           </Card>
         </View>
         <View style={buttonContainer}>
-          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' />
+          <Button style={submitButton} textColor={colors.colorAccent} title='Confirm' onPress={() => this.submitButtonPressed()}/>
         </View>
       </View>
     );
@@ -118,6 +123,8 @@ const styles = StyleSheet.create({
     width: '90%',
     paddingBottom: 4,
     paddingTop: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
     marginLeft: 8,
     marginRight: 8,
     textAlign: 'left',
