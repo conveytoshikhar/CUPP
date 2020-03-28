@@ -81,6 +81,16 @@ class TransactionDetailsScreen extends Component {
           </View>
         </View>
         <View style = {charityDetailsContainer}>
+          {/* {() => {
+            return item.charities.map(charity => {
+              (
+                <View style={charityDetail}>
+            <Text style={charityName}>{charity.name}</Text>
+            <Text style={charityPrice}>{charity.amount}</Text>
+          </View>
+              )
+            })
+          }} */}
           <View style={charityDetail}>
             <Text style={charityName}>Team Trees</Text>
             <Text style={charityPrice}>$ 0.30</Text>

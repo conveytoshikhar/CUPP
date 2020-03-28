@@ -15,10 +15,22 @@ class ClientTransactionScreen extends Component {
       transactions: null,
       transactionList: [{id:0 , name: 'Starbucks', category: 'Food', amountPaid:'$ 4.00', change: '$ 0.74', price: '$ 3.26', imageURL:'https://illuminatisymbols.info/wp-content/uploads/illuminati-symbols-Starbucks-Coffee-Logo.gif' , 
       transactionScreenImageURL: 'https://images.pexels.com/photos/597933/pexels-photo-597933.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+      charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
     },
-      {id:1 , name: 'Park N Shop', category: 'Shopping', amountPaid:'$ 100.00', change: '$ 0.34', price: '$ 99.66' ,imageURL:'https://media.glassdoor.com/sqll/974481/parknshop-squarelogo-1507201008337.png', transactionScreenImageURL: 'https://cms.qz.com/wp-content/uploads/2013/10/park1.jpg?quality=75&strip=all&w=1600&h=900&crop=1'},
-      {id:2 , name: 'McDonalds', category: 'Food', amountPaid:'$ 35.00', change: '$ 0.56', price: '$ 34.44' ,imageURL:'https://i.pinimg.com/originals/85/0b/d3/850bd3e6e82be4f4208b0ba99edeb96b.jpg', transactionScreenImageURL: 'https://cms.qz.com/wp-content/uploads/2017/07/mcdonalds.jpg?quality=75&strip=all&w=1600&h=900&crop=1'},
-      {id:3 , name: 'Sasa', category: 'Shopping', amountPaid:'$ 102.00', change: '$ 0.99', price: '$ 101.01' ,imageURL:'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg', transactionScreenImageURL: 'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg'}]
+      {id:1 , name: 'Park N Shop', category: 'Shopping', amountPaid:'$ 100.00', change: '$ 0.34', price: '$ 99.66' ,imageURL:'https://media.glassdoor.com/sqll/974481/parknshop-squarelogo-1507201008337.png', 
+      transactionScreenImageURL: 'https://cms.qz.com/wp-content/uploads/2013/10/park1.jpg?quality=75&strip=all&w=1600&h=900&crop=1',
+      charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
+    },
+      {id:2 , name: 'McDonalds', category: 'Food', amountPaid:'$ 35.00', change: '$ 0.56', price: '$ 34.44' ,imageURL:'https://i.pinimg.com/originals/85/0b/d3/850bd3e6e82be4f4208b0ba99edeb96b.jpg', 
+      transactionScreenImageURL: 'https://cms.qz.com/wp-content/uploads/2017/07/mcdonalds.jpg?quality=75&strip=all&w=1600&h=900&crop=1',
+      charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
+    },
+      {id:3 , name: 'Sasa', category: 'Shopping', amountPaid:'$ 102.00', change: '$ 0.99', price: '$ 101.01' ,imageURL:'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg',
+       transactionScreenImageURL: 'https://wba-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/Sa-Sa-Logo.jpg',
+       charities: [{name: 'Red Cross' , amount: '$ 0.4'} , {name: 'Tree Relief' , amount: '$ 0.2'} , {name: 'COVID Charity' , amount: '$ 0.1'}]
+      }
+      
+      ]
     }
   }
 
