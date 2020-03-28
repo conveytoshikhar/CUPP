@@ -1,19 +1,55 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, FlatList, ImageBackground, TouchableOpacity} from 'react-native'
-import { Heading, Card, Icon } from '../Components'
+import { View, StyleSheet, Text, FlatList, ImageBackground, TouchableOpacity } from 'react-native'
+import { Heading, Card, Icon, Loading } from '../Components'
 import { dimens, colors, iconNames, customFonts, screens } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
+import firebase from '../config/firebase'
 
 class ClientWelcomeScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
       navigation: props.navigation,
+      isContenLoading: true,
       charityList: [{ id: '0', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' },
       { id: '1', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' },
       { id: '2', name: 'Healthcare U', shortDescription: 'Lorem Ipsum do rem mi fnewf aje fsfs.', imageURL: '' }]
     }
+  }
+
+  componentDidMount = () => {
+    this.fetchUserDetailsFromDB()
+  }
+
+  fetchUserDetailsFromDB = async () => {
+    const user = firebase.auth().currentUser
+    const uid = user.uid
+    const clientRef = firebase.firestore().collection('clients').doc(uid)
+    let charitableAmount = null 
+    let charitiesHelped = null
+    let transactionsMade = null
+
+    await clientRef.get().then(function (doc) {
+      if (doc.exists) {
+        const data = doc.data()
+        charitableAmount = data.charitableAmount
+        charitiesHelped = data.charitiesHelped
+        transactionsMade = data.transactionsMade
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+      alert("Error connecting to database")
+    });
+
+    this.setState({
+      charitableAmount: charitableAmount,
+      charitiesHelped: charitiesHelped,
+      transactionsMade: transactionsMade,
+      isContenLoading: false
+    })
   }
   render() {
     const {
@@ -34,7 +70,7 @@ class ClientWelcomeScreen extends Component {
     const {
       navigation
     } = this.props
-    return (
+    const componenetWhenLoaded =
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Welcome' heading />
         <View style={personContainer}>
@@ -46,17 +82,17 @@ class ClientWelcomeScreen extends Component {
             <View style={innerProfileCardContainer}>
 
               <View style={denominationContainer}>
-                <Text style={denomination}>HKD 123.30</Text>
+                <Text style={denomination}>{this.state.charitableAmount}</Text>
                 <Text style={denominationSubHeading}>Total Avaiable Charitable Amount</Text>
               </View>
 
               <View style={innerProfileLowerCardContainer}>
                 <View style={transactionsMadeContainer}>
-                  <Text style={denomination}>13</Text>
+                  <Text style={denomination}>{this.state.transactionsMade}</Text>
                   <Text style={denominationSubHeading}>Monthy Transactions</Text>
                 </View>
                 <View style={chairitesHelpedContainer}>
-                  <Text style={denomination}>13</Text>
+                  <Text style={denomination}>{this.state.charitiesHelped}</Text>
                   <Text style={denominationSubHeading}>Charities Helped</Text>
                 </View>
               </View>
@@ -75,7 +111,10 @@ class ClientWelcomeScreen extends Component {
           renderItem={({ item }) => CharityItem(item, this.props)}
           keyExtractor={(item) => item.id} />
       </View>
-    );
+
+    const componentLoading = <Loading />
+
+    return this.state.isContenLoading ? componentLoading : componenetWhenLoaded
   }
 }
 
@@ -140,18 +179,22 @@ const CharityItem = (item, props) => {
               source={{ uri: 'sectionContent.imageURL' }} />
           </Card>
 
-          <TouchableOpacity onPress={ () => {props.navigation.navigate(screens.CharityDescriptionPage, {
-            charity: item
-          })}}>
+          <TouchableOpacity onPress={() => {
+            props.navigation.navigate(screens.CharityDescriptionPage, {
+              charity: item
+            })
+          }}>
             <View style={textContainer}>
               <Text style={charityHeading}>{item.name}</Text>
               <Text style={charityDescription}>{item.shortDescription}</Text>
             </View>
           </TouchableOpacity>
-          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={ () => {props.navigation
-            .navigate(screens.CharityDescriptionPage, {
-              charity: item
-            })} } />
+          <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={() => {
+            props.navigation
+              .navigate(screens.CharityDescriptionPage, {
+                charity: item
+              })
+          }} />
         </View>
       </Card>
     </View>

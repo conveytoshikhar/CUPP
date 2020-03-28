@@ -28,13 +28,12 @@ class ClientCharityScreen extends Component {
       let role = appConfig.userRoleClient
       await userRef.doc(uid).update({
         role: role,
-        working: 'wprlog'
       })
       await clientRef.doc(uid).set({
         uid: uid,
         charitableAmount: 123.30,
         transactionsMade: 13,
-        chartitiesHelped: 11,
+        charitiesHelped: 11,
         card: null,
         transactions: []
       })
