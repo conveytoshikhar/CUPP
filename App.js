@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import SplashScreen from './screens/SplashScreen';
 import { screens } from './constants';
+import * as Font from 'expo-font';
 
 const AppNavigator = createStackNavigator({
   SplashScreen: SplashScreen
@@ -14,18 +15,50 @@ const AppNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export default function App() {
-  
-  return (
-    <AppContainer />
-  );
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fontLoaded: false,
+      isAppReady: false
+    }
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'raleway-bold': require('./assets/fonts/Raleway-Bold.ttf'),
+      'raleway-bold-italic': require('./assets/fonts/Raleway-BoldItalic.ttf'),
+      'raleway-extra-bold': require('./assets/fonts/Raleway-ExtraBold.ttf'),
+      'raleway-extra-bold-italic': require('./assets/fonts/Raleway-ExtraBoldItalic.ttf'),
+      'raleway-italic': require('./assets/fonts/Raleway-Italic.ttf'),
+      'raleway-light': require('./assets/fonts/Raleway-Light.ttf'),
+      'raleway-light-italic': require('./assets/fonts/Raleway-LightItalic.ttf'),
+      'raleway-medium': require('./assets/fonts/Raleway-Medium.ttf'),
+      'raleway-medium-italic': require('./assets/fonts/Raleway-MediumItalic.ttf'),
+      'raleway-regular': require('./assets/fonts/Raleway-Regular.ttf'),
+      'raleway-semi-bold': require('./assets/fonts/Raleway-SemiBold.ttf'),
+      'raleway-semi-bold-italic': require('./assets/fonts/Raleway-SemiBoldItalic.ttf'),
+      'raleway-thin': require('./assets/fonts/Raleway-Thin.ttf'),
+      'raleway-thin-italic': require('./assets/fonts/Raleway-ThinItalic.ttf'),
+      'raleway-medium': require('./assets/fonts/Raleway-Medium.ttf')
+    });
+
+    this.setState({
+      fontLoaded: true,
+      isAppReady: true
+    })
+  }
+
+  render() {
+    return this.state.isAppReady
+      ? <AppContainer />
+      : null
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+App.navigationOptions = {
+  header: null
+}
+
+export default App

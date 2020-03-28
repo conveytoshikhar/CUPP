@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text} from 'react-native'
-import { } from '../Components'
+import { View, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native'
+import { LogoPlaceholder } from '../Components'
 import { dimens, colors } from '../constants'
 import { commonStyling } from '../common' 
-import {PropTypes} from 'prop-types'
+import { PropTypes } from 'prop-types'
 
 class SplashScreen extends Component {
   constructor(props){
@@ -15,7 +15,10 @@ class SplashScreen extends Component {
   }
   render() {
     const {
-      mainContainer
+      mainContainer,
+      overlayStyle,
+      loadingStyle,
+      loadingContainer
     } = styles
 
     const {
@@ -23,18 +26,43 @@ class SplashScreen extends Component {
     } = this.props
 
     return (
-      <View style={mainContainer}>
-        <Text> Hello from {this.state.name} </Text>
-      </View>
+      <ImageBackground
+        style={mainContainer}
+        imageStyle={{ paddingLeft: 120 }}
+        source={require('../assets/Splash/splashScreen.jpg')}>
+        <View style={overlayStyle}>
+          <LogoPlaceholder accent={colors.colorAccent} size={55} />
+          <View style={loadingContainer}>
+            <ActivityIndicator style={loadingStyle} size='large' color={colors.colorAccent} />
+          </View>
+        </View>
+      </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    ...commonStyling.mainContainer,
+    ...commonStyling.mainContainer
+  },
+  overlayStyle: {
+    backgroundColor: colors.colorPrimaryTransluscent,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center'
+  },
+  logoStyle: {
+    width: dimens.logoWidthOnboarding,
+    height: dimens.logoHeightOnboarding,
+    borderColor: colors.colorAccent,
+    borderWidth: 1,
+  },
+  loadingStyle: {
+    fontSize: 50
+  },
+  loadingContainer: {
+    marginTop: 40,
   }
 })
 
