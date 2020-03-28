@@ -23,13 +23,12 @@ class SplashScreen extends Component {
 
   navigateToScreen = async () => {
     const user = firebase.auth().currentUser
-    const uid = user.uid
     const userRef = firebase.firestore().collection('users')
     const clientRef = firebase.firestore().collection('clients')
     const charityRef = firebase.firestore().collection('charityOwners')
     if(user) {
+      const uid = user.uid
       let role = null
-
       await userRef.doc(uid).get().then(function (doc) {
         if (doc.exists) {
           const data = doc.data()
