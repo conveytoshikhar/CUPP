@@ -29,7 +29,10 @@ class TransactionDetailsScreen extends Component {
       priceDetail,
       priceValue,
       priceType,
-      charityDetailsContainer
+      charityDetailsContainer,
+      charityDetail,
+      charityName,
+      charityPrice
     } = styles
 
     const {
@@ -40,7 +43,7 @@ class TransactionDetailsScreen extends Component {
         <Heading headingStyle={headingStyle} title='Transaction' />
         <View style={itemDetailsContainer}>
         <Text style={cardHeading}>Starbucks</Text>
-        <Text style={cardSubHeading}>FOOD</Text>
+        <Text style={cardSubHeading}>Food</Text>
           <Card
             width= {350}
             height={200}
@@ -69,11 +72,18 @@ class TransactionDetailsScreen extends Component {
           </View>
         </View>
         <View style = {charityDetailsContainer}>
-          
-        </View>
-
-        <View style={buttonContainer}>
-          <Button style={submitButton} textColor={colors.colorAccent} title='Back' />
+          <View style={charityDetail}>
+            <Text style={charityName}>Team Trees</Text>
+            <Text style={charityPrice}>$ 0.30</Text>
+          </View>
+          <View style={charityDetail}>
+            <Text style={charityName}>Direct Relief</Text>
+            <Text style={charityPrice}>$ 0.50</Text>
+          </View>
+          <View style={charityDetail}>
+            <Text style={charityName}>Red Cross</Text>
+            <Text style={charityPrice}>$ 0.24</Text>
+          </View>
         </View>
       </View>
     );
@@ -93,7 +103,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   itemDetailsContainer: {
-    marginTop: 20,
+    marginTop: 35,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
@@ -105,10 +115,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   charityDetailsContainer: {
-    marginTop: 20,
-    width: '100%',
-    flexDirection:'row',
-    justifyContent: 'center'
+    marginTop: 50,
+    width: '100%'
   },
   buttonContainer: {
     width: '100%',
@@ -130,18 +138,22 @@ const styles = StyleSheet.create({
   cardHeading: {
     fontFamily: customFonts.semiBold,
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 25,
+    paddingTop:8,
+    paddingBottom:8,
     color: colors.colorPrimary
   },
   cardSubHeading: {
-    paddingBottom: 8,
+    paddingBottom: 15,
     paddingTop: 8,
-    fontFamily: customFonts.regular,
-    textAlign: 'center'
+    fontFamily: customFonts.medium,
+    textAlign: 'center',
+    fontSize: 15
   },
   imageStyling: {
     width: 350,
     height: 200,
+    padding:8,
     borderRadius: dimens.defaultBorderRadius,
   },
   priceValue:{color:colors.colorPrimary, 
@@ -154,6 +166,20 @@ const styles = StyleSheet.create({
   alignItems:'center'
   },
   priceType: {
+    fontFamily:customFonts.semiBold, 
+    fontSize:15
+  },
+  charityDetail:{
+    flexDirection:'row', 
+    justifyContent:'space-between',
+    padding:15    
+  },
+  charityName:{
+    fontFamily:customFonts.semiBold, 
+    color:colors.colorPrimary, 
+    fontSize:15
+  },
+  charityPrice:{
     fontFamily:customFonts.semiBold, 
     fontSize:15
   }
