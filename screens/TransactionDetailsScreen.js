@@ -23,7 +23,7 @@ class TransactionDetailsScreen extends Component {
       cardNumberContainer,
       cardNumberInput,
       cardHeading,
-      
+      cardSubHeading
     } = styles
 
     const {
@@ -33,13 +33,14 @@ class TransactionDetailsScreen extends Component {
       <View style={mainContainer}>
         <Heading headingStyle={headingStyle} title='Transaction' />
         <View style={creditCardContainer}>
+        <Text style={cardHeading}>Starbucks</Text>
+        <Text style={cardSubHeading}>FOOD</Text>
           <Card
             width={350}
             height={220}
             elevation={4}>
             <View>
-              <Text style={cardHeading}>Starbucks</Text>
-              <Text style={cardSubHeading}>FOOD</Text>
+
               <View style={cardNumberContainer}>
                 <TextInput style={cardNumberInput} />
 
@@ -91,10 +92,16 @@ const styles = StyleSheet.create({
     fontFamily: customFonts.regular
   },
   cardHeading: {
-
+    fontFamily: customFonts.semiBold,
+    textAlign: 'center',
+    fontSize: 20,
+    paddingTop: 5
   },
   cardSubHeading: {
-
+    paddingBottom: 5,
+    paddingTop: 5,
+    fontFamily: customFonts.light,
+    textAlign: 'center'
   }
 })
 
