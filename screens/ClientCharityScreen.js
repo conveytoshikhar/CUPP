@@ -4,6 +4,7 @@ import { colors, customFonts, strings } from '../constants'
 import { commonStyling } from '../common' 
 import {PropTypes} from 'prop-types'
 import {Utils} from '../utils'
+import firebase from '../config/firebase'
 import screens from '../constants/screens';
 import appConfig from '../config/appConfig';
 
@@ -17,25 +18,36 @@ class ClientCharityScreen extends Component {
   }
 
   navigateToScreen = async (screen) => {
-    // const user = firebase.auth().currentUser
-    // const uid = user.uid
-    // const userRef = firebase.firestore().collection(collectionNames.users)
-    // const supplierRef = firebase.firestore().collection(collectionNames.suppliers)
+    const user = firebase.auth().currentUser
+    const uid = user.uid
+    const userRef = firebase.firestore().collection('users')
+    const clientRef = firebase.firestore().collection('clients')
+    const charityRef = firebase.firestore().collection('charityOwners')
 
     if(screen === screens.CreditCardEnterScreen) {
       let role = appConfig.userRoleClient
-      // await userRef.doc(uid).update({
-      //   role: role
-      // })
-      // await supplierRef.doc(uid).set({
-      //   uid: uid,
-      //   clients: [],
-      //   inventory: []
-      // })
+      await userRef.doc(uid).update({
+        role: role,
+      })
+      await clientRef.doc(uid).set({
+        uid: uid,
+        charitableAmount: 123.30,
+        transactionsMade: 13,
+        charitiesHelped: 11,
+        card: null,
+        transactions: []
+      })
     }else{
       let role = appConfig.userRoleCharityOwner
       await userRef.doc(uid).update({
         role: role
+      })
+      await charityRef.doc(uid).set({
+        uid: uid,
+        amountReceived: 123.30,
+        transactionReceived: 13,
+        helpers: 11,
+        transactions: []
       })
     }
     Utils.dispatchScreen(screen, undefined, this.state.navigation);

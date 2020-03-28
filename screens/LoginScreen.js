@@ -15,20 +15,99 @@ import {
   InputWithSubHeading,
   Back
 } from '../Components'
-import { dimens, colors, customFonts, strings } from '../constants'
-import { commonStyling } from '../common' 
-import {PropTypes} from 'prop-types'
+import { dimens, colors, customFonts, strings, screens } from '../constants'
+import { commonStyling } from '../common'
+import { PropTypes } from 'prop-types'
+import firebase from '../config/firebase'
+import appConfig from '../config/appConfig';
+import { Utils } from '../utils';
 
 class LoginScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       navigation: props.navigation,
-      name: 'LoginScreen'
+      emailEntered: null,
+      passwordEntered: null,
+      loginButtonLoading: false
     }
   }
 
- render() {
+  setEmailEntered = (text) => {
+    this.setState({
+      emailEntered: text
+    })
+  }
+
+  setPasswordEntered = (text) => {
+    this.setState({
+      passwordEntered: text
+    })
+  }
+
+
+  initiateLogin = () => {
+    const {
+      emailEntered,
+      passwordEntered
+    } = this.state
+
+    this.setState({
+      loginButtonLoading: true
+    })
+    this.performLogin(emailEntered, passwordEntered)
+  }
+
+  async performLogin(email, password) {
+    await firebase.auth().signOut()
+    await firebase.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+      let errorCode = error.code
+      let errorMessage = error.message
+      if (error) {
+        alert(errorMessage)
+        this.setState({
+          loginButtonLoading: false
+        })
+      }
+    }).then((loginObject) => {
+      if (loginObject && loginObject.user) {
+        this.onSuccessfulLogin()
+      }
+    })
+  }
+
+  onSuccessfulLogin = async () => {
+    //login has been enabled, check here for the missing props of user and redirect accordingly
+    const user = firebase.auth().currentUser
+    const firestore = firebase.firestore()
+    const userRef = firestore.collection('users')
+    const userID = user.uid
+    let userFirestore = null
+    let screenToNavigate = null
+    await userRef.doc(userID).get().then((doc) => doc.exists ? userFirestore = doc.data() : null)
+    if (userFirestore) {
+      const role = userFirestore.role
+      if (role === appConfig.userRoleClient) {
+        screenToNavigate = screens.ClientHome
+      }else{
+        //change later
+        screenToNavigate = screens.ProfileScreen 
+      }
+      this.setState({
+        loginButtonLoading: false
+      })
+      Utils.dispatchScreen(screenToNavigate, undefined, this.state.navigation)
+    } else {
+      alert('User has been deleted from our database, please register again!')
+      this.setState({
+        loginButtonLoading: false
+      })
+    }
+  }
+
+  
+
+  render() {
     const {
       mainContainer,
       logoContainer,
@@ -62,31 +141,10 @@ class LoginScreen extends Component {
               style={{ ...commonStyling.backButtonStyling }}
               onPress={() => navigation.goBack()} />
 
-            <LogoPlaceholder accent={colors.colorPrimary} size={44} iconSize={32} iconMargin={12}/>
+            <LogoPlaceholder accent={colors.colorPrimary} size={44} iconSize={32} iconMargin={12} />
           </View>
 
           <View style={contentContainer}>
-
-            <View style={socialContainer}>
-              <Card
-                width={dimens.logoWidthOnboarding}
-                height={dimens.buttonHeight}
-                elevation={10}>
-                <SocialButton
-                  title={strings.facebook}
-                  icon='logo-facebook'
-                  iconColor={colors.facebookBlue}
-                  style={socialButton}
-                  onPress={this.loginWithFacebook} />
-              </Card>
-            </View>
-
-            <View style={orContainer}>
-              <View style={thinLine} />
-              <Text style={orStyling}> {strings.or} </Text>
-              <View style={thinLine} />
-            </View>
-
             <View style={loginDetailsContainer}>
               <InputWithSubHeading
                 subHeadingTitle={strings.emailSubHeading}
@@ -131,11 +189,7 @@ class LoginScreen extends Component {
             </View>
           </View>
         </ScrollView>
-
       </KeyboardAvoidingView>
-
-
-
     return screen
   }
 }
@@ -147,7 +201,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flex: 1,
-    paddingTop: dimens.screenSafeUpperNotchDistance + 40,
+    paddingTop: dimens.screenSafeUpperNotchDistance + 80,
     alignItems: 'center',
     justifyContent: 'center'
   },

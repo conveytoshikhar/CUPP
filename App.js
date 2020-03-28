@@ -13,8 +13,10 @@ import TransactionDetailsScreen from './screens/TransactionDetailsScreen'
 import ClientWelcomeScreen from './screens/ClientWelcomeScreen';
 import ClientTransactionScreen from './screens/ClientTransactionScreen';
 import ClientHome from './screens/ClientHome';
+import CharityDescriptionPage from './screens/CharityDescriptionPage';
 
 import { decode, encode } from 'base-64'
+import ProfileScreen from './screens/ProfileScreen';
 global.crypto = require("@firebase/firestore");
 global.crypto.getRandomValues = byteArray => { for (let i = 0; i < byteArray.length; i++) { byteArray[i] = Math.floor(256 * Math.random()); } }
 
@@ -33,10 +35,12 @@ const AppNavigator = createStackNavigator({
   TransactionDetailsScreen: TransactionDetailsScreen,
   ClientWelcomeScreen: ClientWelcomeScreen,
   ClientTransactionScreen: ClientTransactionScreen,
-  ClientHome: ClientHome
+  ClientHome: ClientHome,
+  CharityDescriptionPage: CharityDescriptionPage,
+  ProfileScreen: ProfileScreen
 },
   {
-    initialRouteName: screens.ClientHome
+    initialRouteName: screens.SplashScreen
   })
 
 const AppContainer = createAppContainer(AppNavigator);

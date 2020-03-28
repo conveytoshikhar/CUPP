@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { Back, Heading, InputWithSubHeading, Button } from '../Components'
-import { dimens, colors, strings } from '../constants'
+import { dimens, colors, strings, screens } from '../constants'
 import { commonStyling } from '../common'
 import {PropTypes} from 'prop-types'
+import firebase from '../config/firebase'
 import appConfig from '../config/appConfig'
+import { Utils } from '../utils';
 
 class RegistrationScreen extends Component {
   constructor(props){
@@ -28,6 +30,107 @@ class RegistrationScreen extends Component {
       confirmationPasswordStatus: false
     }
   }
+
+  setEmailEntered = (text) => {
+    this.setState({
+      emailEntered: text
+    })
+  }
+
+  setNameEntered = (text) => {
+    this.setState({
+      nameEntered: text
+    })
+  }
+
+  setPasswordEntered = (text) => {
+    this.setState({
+      passwordEntered: text
+    })
+  }
+
+  setConfirmationPasswordEntered = (text) => {
+    this.setState({
+      confirmationPasswordEntered: text
+    })
+  }
+
+
+  submitButtonOnClick = () => {
+    const {
+      nameEntered,
+      emailEntered,
+      passwordEntered,
+      confirmationPasswordEntered
+    } = this.state
+
+    this.setState({
+      showLoadingDialog: true,
+      submitButtonClicked: true
+    })
+
+    this.performRegistration()
+
+  }
+
+  performRegistration() {
+
+    const {
+      emailEntered,
+      passwordEntered,
+    } = this.state
+
+    console.log(this.state)
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(emailEntered, passwordEntered)
+      .then((user) => this.successfulRegistration(user))
+      .catch((error) => this.registrationFailure(error))
+
+  }
+
+  successfulRegistration = async (_) => {
+
+    await firebase.auth().currentUser.updateProfile({
+      displayName: this.state.nameEntered
+    })
+
+    await this.writeUserToFireStore()
+
+    this.setState({
+      showLoadingDialog: false
+    }, () => { Utils.dispatchScreen(screens.ClientCharityScreen, undefined, this.state.navigation) })
+
+  }
+
+  registrationFailure = (error) => {
+    this.setState({
+      showLoadingDialog: false,
+      submitButtonClicked: false
+    })
+    alert(error)
+  }
+
+  writeUserToFireStore = async () => {
+
+    const firestore = firebase.firestore()
+    const ref = firestore.collection('users')
+    const user = firebase.auth().currentUser
+
+    await ref.doc(user.uid).set({
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email,
+      role: null,
+    })
+
+
+  }
+
+
+
+
 
   render() {
     const {
