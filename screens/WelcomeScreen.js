@@ -35,8 +35,8 @@ class WelcomeScreen extends React.Component {
           style={backgroundStyle}>
           <View style={contentContainer}>
             <View style={logoContainer}>
-              <LogoPlaceholder accent={colors.colorAccent} size={80} iconSize={55} iconMargin={24} />
-              <Text style={subHeading}>{strings.whereYourCentsMakeSense}</Text>
+              <LogoPlaceholder accent={colors.colorAccent} size={40} />
+              <Text style={subHeading}>Insert Subheading Here</Text>
             </View>
             <View style={buttonContainer}>
               <OutlineButton

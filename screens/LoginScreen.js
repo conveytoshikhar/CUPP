@@ -78,34 +78,10 @@ class LoginScreen extends Component {
 
   onSuccessfulLogin = async () => {
     //login has been enabled, check here for the missing props of user and redirect accordingly
-    const user = firebase.auth().currentUser
-    const firestore = firebase.firestore()
-    const userRef = firestore.collection('users')
-    const userID = user.uid
-    let userFirestore = null
-    let screenToNavigate = null
-    await userRef.doc(userID).get().then((doc) => doc.exists ? userFirestore = doc.data() : null)
-    if (userFirestore) {
-      const role = userFirestore.role
-      if (role === appConfig.userRoleClient) {
-        screenToNavigate = screens.ClientHome
-      }else{
-        //change later
-        screenToNavigate = screens.CharityHome 
-      }
-      this.setState({
-        loginButtonLoading: false
-      })
-      Utils.dispatchScreen(screenToNavigate, undefined, this.state.navigation)
-    } else {
-      alert('User has been deleted from our database, please register again!')
-      this.setState({
-        loginButtonLoading: false
-      })
-    }
+    Utils.dispatchScreen(screens.ClientHome, undefined, this.state.navigation)
   }
 
-  
+
 
   render() {
     const {

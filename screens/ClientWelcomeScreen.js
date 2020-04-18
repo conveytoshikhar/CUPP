@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, FlatList, ImageBackground, TouchableOpacity } from 'react-native'
-import { Heading, Card, Icon, Loading } from '../Components'
+import { View, StyleSheet, Text, SectionList, Animated, ImageBackground, Dimensions, TouchableOpacity } from 'react-native'
+import { SearchIcon, Card, Icon, Loading } from '../Components'
 import { dimens, colors, iconNames, customFonts, screens } from '../constants'
 import { commonStyling } from '../common'
 import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
+import collectionNames from '../config/collectionNames';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SearchBar } from 'react-native-elements';
+
+const HEADER_EXPANDED_HEIGHT = 250;
+const HEADER_COLLAPSED_HEIGHT = 100;
+
+const { height: SCREEN_HEIGHT } = Dimensions.get("screen")
 
 class ClientWelcomeScreen extends Component {
   constructor(props) {
@@ -12,28 +20,117 @@ class ClientWelcomeScreen extends Component {
     this.state = {
       navigation: props.navigation,
       isContenLoading: true,
-      charityList: []
+      coursesList: [],
+      scrollY: new Animated.Value(0),
+      search: false,
+      showSearch: false,
+      searchCourseList: []
     }
   }
 
   componentDidMount = () => {
-    this.fetchUserDetailsFromDB()
-    this.fetchCharitiesFromDB()
+    this.fetchCoursesFromDB()
   }
 
-  fetchCharitiesFromDB = async () => {
-    const charityRef = firebase.firestore().collection('charityOwners')
-    let charitiesList = []
-    await charityRef
+  showSearchPanel = () => this.setState({ showSearch: true })
+
+  getMainHeaderView = () => {
+    const {
+      headingStyle,
+      subHeadingStyle,
+      expandedHeaderContainerStyle
+    } = styles
+
+    return (
+      <View style={expandedHeaderContainerStyle}>
+        <Text style={headingStyle}>Courses</Text>
+        <Text style={subHeadingStyle}>Find the course of your choice</Text>
+      </View>
+    )
+  }
+
+  getCollapsedHeaderView = () => {
+    const {
+      collpasedHeaderContainer,
+      collpasedHeaderTitle,
+    } = styles
+
+    return (
+      <View style={collpasedHeaderContainer}>
+        <Text style={collpasedHeaderTitle}>Courses</Text>
+      </View>
+    )
+  }
+
+
+  updateSearch = search => {
+    this.setState({ search: true })
+    if (search === '') {
+      this.setState({
+        searchCourseList: this.state.coursesList
+      })
+    }
+    const searchEntered = search.toUpperCase()
+    const newListToShow = []
+    for (let index in this.state.coursesList) {
+      const title = this.state.coursesList[index].name
+      let itemObject = this.state.coursesList[index]
+      const coursesToShow = []
+      for (let index in itemObject.data) {
+        let item = itemObject.data[index]
+        if (item.name.toUpperCase().includes(searchEntered)) {
+          coursesToShow.push(item)
+        }
+      }
+      let objectToShow = {}
+      objectToShow.title = title
+      objectToShow.data = coursesToShow
+      newListToShow.push(objectToShow)
+    }
+
+    this.setState({
+      searchCourseList: newListToShow
+    })
+  }
+
+  fetchCoursesFromDB = async () => {
+    const coursesRef = firebase.firestore().collection(collectionNames.courses)
+    let coursesList = []
+    await coursesRef
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          // doc.data() is never undefined for query doc snapshots
-          charitiesList.push(doc.data())
+          coursesList.push(doc.data())
         });
       })
+    this.formulateSectionListOfCourse(coursesList)
+  }
+
+  formulateSectionListOfCourse = (coursesList) => {
+    let coursesDictionary = {}
+    for (let index in coursesList) {
+      const course = coursesList[index]
+      const category = course.offeringEntity
+      if (Array.isArray(coursesDictionary[category])) {
+        const courses = coursesDictionary[category]
+        courses.push(course)
+        coursesDictionary[category] = courses
+      } else {
+        coursesDictionary[category] = [course]
+      }
+    }
+    this.constructFinalSectionList(coursesDictionary)
+  }
+
+  constructFinalSectionList = (dictionary) => {
+    let listToReturn = []
+    if (dictionary) {
+      for (let key in dictionary) {
+        listToReturn.push({ title: key, data: dictionary[key] })
+      }
+    }
     this.setState({
-      charityList: charitiesList,
+      coursesList: listToReturn,
       isContenLoading: false
     })
   }
@@ -67,20 +164,30 @@ class ClientWelcomeScreen extends Component {
       isContenLoading: false
     })
   }
+
   render() {
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      extrapolate: 'clamp'
+    }); 3
+    const headerTitleOpacity = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      outputRange: [0, 1],
+      extrapolate: 'clamp'
+    });
+    const heroTitleOpacity = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      outputRange: [1, 0],
+      extrapolate: 'clamp'
+    });
+
     const {
       mainContainer,
-      headingStyle,
+      headerSearchStyling,
       personContainer,
-      upperCardContainer,
-      innerProfileCardContainer,
-      denominationContainer,
-      denomination,
-      denominationSubHeading,
-      transactionsMadeContainer,
-      innerProfileLowerCardContainer,
-      chairitesHelpedContainer,
-      charitiesHeading
+      mainHeaderContainerStyle,
+      gradientStyle
     } = styles
 
     const {
@@ -88,43 +195,57 @@ class ClientWelcomeScreen extends Component {
     } = this.props
     const componenetWhenLoaded =
       <View style={mainContainer}>
-        <Heading headingStyle={headingStyle} title='Welcome' headingStyle={headingStyle} />
-        <View style={personContainer}>
-          <Icon nameAndroid={iconNames.personAndroid} nameIOS={iconNames.personIOS} onPress={null} color={colors.colorPrimary} onPress={() => navigation.navigate(screens.ProfileScreen)} />
-        </View>
-
-        <View style={upperCardContainer}>
-          <Card width='90%' height={180} elevation={5}>
-            <View style={innerProfileCardContainer}>
-
-              <View style={denominationContainer}>
-                <Text style={denomination}>{this.state.charitableAmount}</Text>
-                <Text style={denominationSubHeading}>Total Available Charitable Amount</Text>
-              </View>
-
-              <View style={innerProfileLowerCardContainer}>
-                <View style={transactionsMadeContainer}>
-                  <Text style={denomination}>{this.state.transactionsMade}</Text>
-                  <Text style={denominationSubHeading}>Monthy Transactions</Text>
-                </View>
-                <View style={chairitesHelpedContainer}>
-                  <Text style={denomination}>{this.state.charitiesHelped}</Text>
-                  <Text style={denominationSubHeading}>Charities Helped</Text>
-                </View>
-              </View>
-            </View>
-
-          </Card>
-        </View>
+        <Animated.View style={[mainHeaderContainerStyle, { height: headerHeight }]}>
+          <LinearGradient
+            style={gradientStyle}
+            colors={[colors.colorPrimary, colors.colorSecondary]}>
+            <Animated.View
+              style={{ flex: 1, opacity: heroTitleOpacity, zIndex: 1 }}>
+              {this.getMainHeaderView()}
+            </Animated.View>
+            <Animated.View
+              style={{ flex: 1, opacity: headerTitleOpacity, zIndex: 1 }}>
+              {this.getCollapsedHeaderView()}
+            </Animated.View>
+          </LinearGradient>
+        </Animated.View>
 
 
-        {/* FLAT LIST */}
-        <Heading title='Charities that need help: ' headingStyle={charitiesHeading} />
-        <FlatList
-          contentContainerStyle={{ paddingTop: 20 }}
-          data={this.state.charityList}
-          renderItem={({ item }) => CharityItem(item, this.props)}
-          keyExtractor={(item) => item.uid} />
+        <SearchIcon
+          style={headerSearchStyling}
+          size={34}
+          onPress={this.showSearchPanel}
+          color={colors.colorAccent} />
+
+        {this.state.showSearch ? <SearchBar
+          placeholder="Search Item"
+          onChangeText={this.updateSearch}
+          platform={(Platform.OS === 'ios') ? 'ios' : 'android'}
+          showCancel={true}
+          round={true}
+          contentContainerStyle={colors.colorAccent}
+          value={this.state.search}
+        /> : null}
+
+        {/* SECTION LIST */}
+        <SectionList
+          scrollEnabled={this.state.coursesList.length ? true : false}
+          contentContainerStyle={{ minHeight: SCREEN_HEIGHT + HEADER_COLLAPSED_HEIGHT }}
+          sections={this.state.search ? this.state.searchCourseList : this.state.coursesList}
+          renderItem={({ item }) => CourseItem(item, this.props)}
+          renderSectionHeader={({ section }) => CourseHeader(section, this.props)}
+          keyExtractor={(item, index) => index + item.price}
+          onScroll={Animated.event(
+            [{
+              nativeEvent: {
+                contentOffset: {
+                  y: this.state.scrollY
+                }
+              }
+            }])
+          }
+          scrollEventThrottle={16}
+        />
       </View>
 
     const componentLoading = <Loading />
@@ -133,7 +254,23 @@ class ClientWelcomeScreen extends Component {
   }
 }
 
-const CharityItem = (item, props) => {
+
+const CourseHeader = (section) => {
+
+  const {
+    sectionHeaderContainer,
+    sectionHeaderTitle
+  } = styles
+
+  const sectionHeader = <View style={sectionHeaderContainer}>
+    <Text style={sectionHeaderTitle}>{section.title}</Text>
+  </View>
+
+  return sectionHeader
+
+}
+
+const CourseItem = (item, props) => {
   const styles = {
     charityItemOuterContainer: {
       width: '100%',
@@ -161,17 +298,17 @@ const CharityItem = (item, props) => {
       justifyContent: 'center',
       alignItems: 'space-evenly'
     },
-    charityHeading: {
-      fontSize: 16,
+    courseHeading: {
+      fontSize: 18,
       fontFamily: customFonts.medium,
       color: colors.colorPrimary
     },
-    charityDescription: {
+    courseDescription: {
       fontSize: 12,
       color: colors.black,
       marginTop: 8,
       fontFamily: customFonts.mediumItalic
-    }
+    },
   }
 
 
@@ -180,29 +317,29 @@ const CharityItem = (item, props) => {
     imageStyle,
     cardItemContainer,
     textContainer,
-    charityHeading,
-    charityDescription
+    courseHeading,
+    courseDescription
   } = styles
 
   const component =
     <View style={charityItemOuterContainer}>
-      <Card width='90%' height={120} elevation={4}>
+      <Card width='95%' height={180} elevation={4}>
         <View style={cardItemContainer}>
-          <Card width={70} height={70} elevation={dimens.defaultBorderRadius}>
+          <Card width={90} height={90} elevation={dimens.defaultBorderRadius}>
             <ImageBackground
               style={imageStyle}
               imageStyle={{ borderRadius: dimens.defaultBorderRadius }}
-              source={{ uri: item.charityImageURL }} />
+              source={{ uri: item.imageURL }} />
           </Card>
-
           <TouchableOpacity onPress={() => {
             props.navigation.navigate(screens.CharityDescriptionPage, {
               charity: item
             })
           }}>
             <View style={textContainer}>
-              <Text style={charityHeading}>{item.charityName}</Text>
-              <Text style={charityDescription}>{item.charityDescription}</Text>
+              <Text style={courseHeading}>{item.name}</Text>
+              <Text style={courseDescription} numberOfLines={3} ellipsizeMode='tail'>wfwhbfwjfbjf wfwfbwebff fgiebgbg g3 geigewig3gwfiewhfiewfgiewgifwiewigfewfgi fwfbhwbfwbfuwbfwbfubuwgbweu</Text>
+              <Text style={courseDescription}>{item.price + ' ' + item.currency}</Text>
             </View>
           </TouchableOpacity>
           <Icon nameAndroid={iconNames.forwardAndroid} nameIOS={iconNames.forwardIOS} onPress={() => {
@@ -294,7 +431,69 @@ const styles = StyleSheet.create({
     color: colors.colorPrimary,
     marginTop: 24,
     marginHorizontal: dimens.screenHorizontalMargin
-  }
+  },
+  sectionHeaderContainer: {
+    width: '100%',
+    height: 44,
+    backgroundColor: colors.colorSecondary,
+    justifyContent: 'center',
+    paddingLeft: dimens.screenHorizontalMargin
+  },
+  sectionHeaderTitle: {
+    color: colors.colorAccent,
+    fontSize: 17,
+    fontFamily: customFonts.semiBold
+  },
+  gradientStyle: {
+    height: '100%',
+    width: '100%',
+    zIndex: -2
+  },
+  headingStyle: {
+    fontSize: 40,
+    fontFamily: customFonts.semiBold,
+    color: colors.colorAccent,
+    marginTop: dimens.screenSafeUpperNotchDistance + 60,
+    width: '100%',
+    textAlign: 'left',
+    paddingLeft: dimens.screenHorizontalMargin
+  },
+  subHeadingStyle: {
+    fontSize: 19,
+    fontFamily: customFonts.regular,
+    marginTop: 10,
+    width: '100%',
+    textAlign: 'left',
+    color: colors.colorAccent,
+    paddingLeft: dimens.screenHorizontalMargin
+  },
+  expandedHeaderContainerStyle: {
+    width: '100%',
+    height: HEADER_EXPANDED_HEIGHT,
+    justifyContent: 'center',
+    flexDirection: 'column',
+    position: 'absolute'
+  },
+  mainHeaderContainerStyle: {
+    width: '100%',
+    backgroundColor: colors.colorPrimary
+  },
+  collpasedHeaderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  collpasedHeaderTitle: {
+    fontSize: 24,
+    textAlign: "center",
+    color: colors.colorAccent,
+    fontFamily: customFonts.semiBold
+  },
+  headerSearchStyling: {
+    position: 'absolute',
+    right: dimens.screenHorizontalMargin,
+    marginTop: dimens.screenSafeUpperNotchDistance + 18
+  },
 
 })
 

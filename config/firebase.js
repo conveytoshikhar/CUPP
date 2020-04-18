@@ -1,17 +1,16 @@
-import firebase from "firebase/app"
+import firebase from "firebase"
 import "firebase/firestore"
 import "firebase/auth"
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDueQMAfwUvjrvk6Bbbip2zj8u_KOq4ReI",
-  authDomain: "finspirehackathon.firebaseapp.com",
-  databaseURL: "https://finspirehackathon.firebaseio.com",
-  projectId: "finspirehackathon",
-  storageBucket: "finspirehackathon.appspot.com",
-  messagingSenderId: "593603447664",
-  appId: "1:593603447664:web:800205724fc1c6d035ddb5",
-  measurementId: "G-7VTS6M2D2H"
-};
+  var firebaseConfig = {
+    apiKey: "AIzaSyDIHK7Di5r7vmB9XLLViI9m-7wLrDl6NYI",
+    authDomain: "cupp-app.firebaseapp.com",
+    databaseURL: "https://cupp-app.firebaseio.com",
+    projectId: "cupp-app",
+  storageBucket: "cupp-app.appspot.com",
+    messagingSenderId: "657173683832",
+    appId: "1:657173683832:web:8c4d997b4807c6aef2578d"
+  };
 
 firebase.initializeApp(firebaseConfig)
 

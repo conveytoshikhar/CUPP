@@ -9,85 +9,48 @@ import firebase from '../config/firebase'
 import appConfig from '../config/appConfig';
 
 class SplashScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       navigation: props.navigation,
       name: 'Splash Screen'
     }
   }
-  
+
   componentDidMount = () => {
-    this.navigateToScreen() 
+    this.navigateToScreen()
   }
 
   navigateToScreen = async () => {
     const user = firebase.auth().currentUser
     const userRef = firebase.firestore().collection('users')
+    const {
+      navigation
+    } = this.state
 
-    if(user) {
-      const uid = user.uid
-      let role = null
-      await userRef.doc(uid).get().then(function (doc) {
-        if (doc.exists) {
-          const data = doc.data()
-          role = data.role
-        } else {
-          console.log("No such document!");
-        }
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
-        alert("Error connecting to database")
-      });
-  
-      if (role === appConfig.userRoleClient) {
-        const resetAction = StackActions.reset({
+    firebase.auth().onAuthStateChanged((user) => {
+      let resetAction = null
+      if (user) {
+        resetAction = StackActions.reset({
           index: 0,
           actions: [
             NavigationActions.navigate({ routeName: screens.ClientHome })
           ]
         })
-        const {
-          navigation
-        } = this.state
-    
-        setTimeout( () => {
-          navigation.dispatch(resetAction)
-        }, 2000)
-      }else{
-        //go here to charity page 
-        const resetAction = StackActions.reset({
+      } else {
+        resetAction = StackActions.reset({
           index: 0,
           actions: [
-            NavigationActions.navigate({ routeName: screens.CharityHome })
+            NavigationActions.navigate({ routeName: screens.WelcomeScreen })
           ]
         })
-        const {
-          navigation
-        } = this.state
-    
-        setTimeout( () => {
-          navigation.dispatch(resetAction)
-        }, 2000)
       }
-    }else{
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({ routeName: screens.WelcomeScreen })
-        ]
-      })
-      const {
-        navigation
-      } = this.state
-  
-      setTimeout( () => {
+      setTimeout(() => {
         navigation.dispatch(resetAction)
       }, 2000)
-    }
-    
-    
+    })
   }
+
   render() {
     const {
       mainContainer,

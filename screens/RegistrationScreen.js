@@ -99,7 +99,7 @@ class RegistrationScreen extends Component {
 
     this.setState({
       showLoadingDialog: false
-    }, () => { Utils.dispatchScreen(screens.ClientCharityScreen, undefined, this.state.navigation) })
+    }, () => { Utils.dispatchScreen(screens.ClientHome, undefined, this.state.navigation) })
 
   }
 
