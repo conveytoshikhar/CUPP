@@ -60,7 +60,7 @@ class CourseDescriptionScreen extends Component {
       <View style={mainContainer}>
         <Icon nameAndroid={iconNames.backAndroid} nameIOS={iconNames.backIOS} style={backButton} color={colors.colorAccent} size={40} onPress={() => navigation.goBack()} />
         <View style={headerContainer}>
-          <Text style={charityName}>{item.charityName}</Text>
+          <Text style={charityName}>{item.name}</Text>
           <Card width={220} height={220} elevation={4}>
             <ImageBackground
               style={imageStyle}

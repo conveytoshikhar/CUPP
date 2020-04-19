@@ -15,7 +15,8 @@ const screens = {
   CharityWelcomeScreen: 'CharityWelcomeScreen',
   CharityHome: 'CharityHome',
   CharityTransactionScreen: 'CharityTransactionScreen',
-  CourseDescriptionScreen: 'CourseDescriptionScreen'
+  CourseDescriptionScreen: 'CourseDescriptionScreen',
+  ClientOrderScreen: 'ClientOrderScreen'
 }
 
 export default screens;
