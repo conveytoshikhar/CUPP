@@ -332,13 +332,13 @@ const CourseItem = (item, props) => {
               source={{ uri: item.imageURL }} />
           </Card>
           <TouchableOpacity onPress={() => {
-            props.navigation.navigate(screens.CharityDescriptionPage, {
-              charity: item
+            props.navigation.navigate(screens.CourseDescriptionScreen, {
+              course: item
             })
           }}>
             <View style={textContainer}>
               <Text style={courseHeading}>{item.name}</Text>
-              <Text style={courseDescription} numberOfLines={3} ellipsizeMode='tail'>wfwhbfwjfbjf wfwfbwebff fgiebgbg g3 geigewig3gwfiewhfiewfgiewgifwiewigfewfgi fwfbhwbfwbfuwbfwbfubuwgbweu</Text>
+        <Text style={courseDescription} numberOfLines={3} ellipsizeMode='tail'>{item.courseDescription}</Text>
               <Text style={courseDescription}>{item.price + ' ' + item.currency}</Text>
             </View>
           </TouchableOpacity>
