@@ -1,43 +1,234 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text} from 'react-native'
-import { } from '../Components'
-import { dimens, colors } from '../constants'
-import { commonStyling } from '../common' 
-import {PropTypes} from 'prop-types'
+import { View, StyleSheet, Text, FlatList, Animated, ImageBackground, Dimensions, TouchableOpacity } from 'react-native'
+import { Loading, SearchIcon } from '../Components'
+import { dimens, colors, iconNames, customFonts, screens } from '../constants'
+import firebase from '../config/firebase'
+import { commonStyling } from '../common'
+import { PropTypes } from 'prop-types'
+import { LinearGradient } from 'expo-linear-gradient';
+import { SearchBar } from 'react-native-elements';
+
+const HEADER_EXPANDED_HEIGHT = 250;
+const HEADER_COLLAPSED_HEIGHT = 100;
+
+const { height: SCREEN_HEIGHT } = Dimensions.get("screen")
 
 class ClientOrderScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
-      navigation: props.navigation
+      navigation: props.navigation,
+      isContentLoading: false,
+      scrollY: new Animated.Value(0),
+      orders: null,
+      showSearch: false
     }
   }
-  render() {
+
+  getMainHeaderView = () => {
     const {
-      mainContainer
+      headingStyle,
+      subHeadingStyle,
+      expandedHeaderContainerStyle
     } = styles
 
-    const {
-      navigation
-    } = this.props
     return (
+      <View style={expandedHeaderContainerStyle}>
+        <Text style={headingStyle}>Orders</Text>
+        <Text style={subHeadingStyle}>Find your orders</Text>
+      </View>
+    )
+  }
+
+  getCollapsedHeaderView = () => {
+    const {
+      collpasedHeaderContainer,
+      collpasedHeaderTitle,
+    } = styles
+
+    return (
+      <View style={collpasedHeaderContainer}>
+        <Text style={collpasedHeaderTitle}>Your orders</Text>
+      </View>
+    )
+  }
+
+
+  componentDidMount = () => {
+    this.fetchOrdersForClient()
+    this.awaitOrdersToRefresh()
+  }
+
+  fetchOrdersForClient = async () => {
+    const userRef = firebase.firestore().collection('users')
+    const currentUser = firebase.auth().currentUser
+    let orders = []
+    await userRef.doc(currentUser.uid)
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          orders = doc.data().orders
+        } else {
+          console.log('Some error with logic. The user is not in our db.')
+        }
+      })
+    this.setState({
+      orders: orders,
+      isContentLoading: false
+    })
+  }
+
+  awaitOrdersToRefresh = async () => {
+    const currentUser = firebase.auth().currentUser
+    const userRef = firebase.firestore().collection('users').doc(currentUser.uid)
+    let orders = null
+    await userRef.onSnapshot(doc => {
+      orders = doc.data().orders
+    })
+    this.setState({
+      orders: orders
+    })
+  }
+
+  render() {
+
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      outputRange: [HEADER_EXPANDED_HEIGHT, HEADER_COLLAPSED_HEIGHT],
+      extrapolate: 'clamp'
+    }); 3
+    const headerTitleOpacity = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      outputRange: [0, 1],
+      extrapolate: 'clamp'
+    });
+    const heroTitleOpacity = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+      outputRange: [1, 0],
+      extrapolate: 'clamp'
+    });
+
+    const {
+      mainContainer,
+      headerSearchStyling,
+      mainHeaderContainerStyle,
+      gradientStyle
+    } = styles
+
+    const componentLoaded = (
       <View style={mainContainer}>
-        <Text> Hello from {this.state.name} </Text>
+        <Animated.View style={[mainHeaderContainerStyle, { height: headerHeight }]}>
+          <LinearGradient
+            style={gradientStyle}
+            colors={[colors.colorPrimary, colors.colorSecondary]}>
+            <Animated.View
+              style={{ flex: 1, opacity: heroTitleOpacity, zIndex: 1 }}>
+              {this.getMainHeaderView()}
+            </Animated.View>
+            <Animated.View
+              style={{ flex: 1, opacity: headerTitleOpacity, zIndex: 1 }}>
+              {this.getCollapsedHeaderView()}
+            </Animated.View>
+          </LinearGradient>
+        </Animated.View>
+
+        <SearchIcon
+          style={headerSearchStyling}
+          size={34}
+          onPress={this.showSearchPanel}
+          color={colors.colorAccent} />
+
+        {this.state.showSearch ? <SearchBar
+          placeholder="Search Item"
+          onChangeText={this.updateSearch}
+          platform={(Platform.OS === 'ios') ? 'ios' : 'android'}
+          showCancel={true}
+          round={true}
+          contentContainerStyle={colors.colorAccent}
+          value={this.state.search}
+        /> : null}
+
+        <FlatList
+          contentContainerStyle={{ minHeight: SCREEN_HEIGHT + HEADER_COLLAPSED_HEIGHT }}
+          onScroll={Animated.event(
+            [{
+              nativeEvent: {
+                contentOffset: {
+                  y: this.state.scrollY
+                }
+              }
+            }])
+          }
+          scrollEventThrottle={16} />
+
+
       </View>
     );
+
+    const componentLoading = <Loading />
+
+    return this.state.isContentLoading ? componentLoading : componentLoaded
+
   }
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     ...commonStyling.mainContainer,
+  },
+  headingStyle: {
+    fontSize: 40,
+    fontFamily: customFonts.semiBold,
+    color: colors.colorAccent,
+    marginTop: dimens.screenSafeUpperNotchDistance + 60,
+    width: '100%',
+    textAlign: 'left',
+    paddingLeft: dimens.screenHorizontalMargin
+  },
+  subHeadingStyle: {
+    fontSize: 19,
+    fontFamily: customFonts.regular,
+    marginTop: 10,
+    width: '100%',
+    textAlign: 'left',
+    color: colors.colorAccent,
+    paddingLeft: dimens.screenHorizontalMargin
+  },
+  expandedHeaderContainerStyle: {
+    width: '100%',
+    height: HEADER_EXPANDED_HEIGHT,
+    justifyContent: 'center',
+    flexDirection: 'column',
+    position: 'absolute'
+  },
+  collpasedHeaderContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  collpasedHeaderTitle: {
+    fontSize: 24,
+    textAlign: "center",
+    color: colors.colorAccent,
+    fontFamily: customFonts.semiBold
+  },
+  headerSearchStyling: {
+    position: 'absolute',
+    right: dimens.screenHorizontalMargin,
+    marginTop: dimens.screenSafeUpperNotchDistance + 18
+  },
+  mainHeaderContainerStyle: {
+    width: '100%',
+  },
+  gradientStyle: {
+    height: '100%',
+    width: '100%',
+    zIndex: -2
+  },
 })
 
 ClientOrderScreen.navigationOptions = {
-  title: 'Orders'
+  header: null
 }
 
 ClientOrderScreen.propTypes = {

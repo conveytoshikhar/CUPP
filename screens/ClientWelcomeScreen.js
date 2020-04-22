@@ -185,14 +185,10 @@ class ClientWelcomeScreen extends Component {
     const {
       mainContainer,
       headerSearchStyling,
-      personContainer,
       mainHeaderContainerStyle,
       gradientStyle
     } = styles
 
-    const {
-      navigation
-    } = this.props
     const componenetWhenLoaded =
       <View style={mainContainer}>
         <Animated.View style={[mainHeaderContainerStyle, { height: headerHeight }]}>
@@ -370,12 +366,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  headingStyle: {
-    color: colors.colorPrimary,
-    marginTop: 55,
-    fontSize: 28,
-    marginHorizontal: dimens.screenHorizontalMargin
   },
   upperCardContainer: {
     width: '100%',
