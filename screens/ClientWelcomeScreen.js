@@ -100,7 +100,7 @@ class ClientWelcomeScreen extends Component {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          coursesList.push(doc.data())
+          coursesList.push({id: doc.id, ...doc.data()})
         });
       })
     this.formulateSectionListOfCourse(coursesList)

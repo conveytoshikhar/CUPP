@@ -18,7 +18,8 @@ class CourseDescriptionScreen extends Component {
       tncAccepted: false,
       confirmationName: null,
       inputNameErrorStatus: false,
-      inputNameErrorTitle: null
+      inputNameErrorTitle: null,
+      tncButtonLoading: false
     }
   }
 
@@ -87,10 +88,14 @@ class CourseDescriptionScreen extends Component {
     const {
       confirmationName
     } = this.state
+    this.setState({
+      tncButtonLoading: true
+    })
     if(!confirmationName) {
       this.setState({
         inputNameErrorStatus: true,
-        inputNameErrorTitle: 'Enter a name to proceed'
+        inputNameErrorTitle: 'Enter a name to proceed',
+        tncButtonLoading: false
       })
       return
     }
@@ -98,7 +103,8 @@ class CourseDescriptionScreen extends Component {
     if (currentUsersName !== confirmationName ){
       this.setState({
         inputNameErrorStatus: true,
-        inputNameErrorTitle: 'Names dont match.'
+        inputNameErrorTitle: 'Names dont match.',
+        tncButtonLoading: false
       })
     }else{
       this.setState({
@@ -110,8 +116,31 @@ class CourseDescriptionScreen extends Component {
     }
   }
 
-  proceedWithCourseEnrollment = () => {
+  proceedWithCourseEnrollment = async () => {
+    const firestore = firebase.firestore()
+    const ref = firestore.collection('users')
+    const user = firebase.auth().currentUser
+    await ref.doc(user.uid).update({
+      courses: firebase.firestore.FieldValue.arrayUnion('courses/'+this.state.item.id)
+    }).then( () => {
+      this.setState({
+        tncButtonLoading: false
+      })
+      this.closeTNCModal()
+      this.navigateToPaymentScreen()
+    }).catch( (error) => {
+      alert('Some probem with our servers: ',error)
+    })
+  }
 
+
+  navigateToPaymentScreen = () => {
+    const {
+      navigation
+    } = this.state
+    navigation.navigate(screens.PaymentScreen, {
+      course: this.state.item
+    })
   }
   
   setConfirmatioName = (text) => {
@@ -178,6 +207,7 @@ class CourseDescriptionScreen extends Component {
                 <Button
                   title='Confirm'
                   textColor={colors.colorAccent}
+                  isLoading={this.state.tncButtonLoading}
                   onPress={this.checkSignatureAndProceed}
                   style={deleteButtonModal} />
               </View>

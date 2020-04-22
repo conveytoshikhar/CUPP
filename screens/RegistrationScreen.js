@@ -122,6 +122,8 @@ class RegistrationScreen extends Component {
       name: user.displayName,
       email: user.email,
       role: null,
+      courses: [],
+      orders: []
     })
 
 
