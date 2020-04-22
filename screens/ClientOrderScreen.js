@@ -18,7 +18,7 @@ class ClientOrderScreen extends Component {
     super(props)
     this.state = {
       navigation: props.navigation,
-      isContentLoading: false,
+      isContentLoading: true,
       scrollY: new Animated.Value(0),
       orders: null,
       showSearch: false
@@ -68,6 +68,7 @@ class ClientOrderScreen extends Component {
       .then(doc => {
         if (doc.exists) {
           orders = doc.data().orders
+          console.log(orders)
         } else {
           console.log('Some error with logic. The user is not in our db.')
         }
@@ -84,9 +85,9 @@ class ClientOrderScreen extends Component {
     let orders = null
     await userRef.onSnapshot(doc => {
       orders = doc.data().orders
-    })
-    this.setState({
-      orders: orders
+      this.setState({
+        orders: orders
+      })
     })
   }
 
@@ -132,24 +133,11 @@ class ClientOrderScreen extends Component {
           </LinearGradient>
         </Animated.View>
 
-        <SearchIcon
-          style={headerSearchStyling}
-          size={34}
-          onPress={this.showSearchPanel}
-          color={colors.colorAccent} />
-
-        {this.state.showSearch ? <SearchBar
-          placeholder="Search Item"
-          onChangeText={this.updateSearch}
-          platform={(Platform.OS === 'ios') ? 'ios' : 'android'}
-          showCancel={true}
-          round={true}
-          contentContainerStyle={colors.colorAccent}
-          value={this.state.search}
-        /> : null}
-
         <FlatList
           contentContainerStyle={{ minHeight: SCREEN_HEIGHT + HEADER_COLLAPSED_HEIGHT }}
+          data={this.state.orders}
+          renderItem={({ item }) => OrderItem(item, this.props)}
+          keyExtractor={item => item.id}
           onScroll={Animated.event(
             [{
               nativeEvent: {
@@ -160,8 +148,6 @@ class ClientOrderScreen extends Component {
             }])
           }
           scrollEventThrottle={16} />
-
-
       </View>
     );
 
@@ -170,6 +156,10 @@ class ClientOrderScreen extends Component {
     return this.state.isContentLoading ? componentLoading : componentLoaded
 
   }
+}
+
+const OrderItem = (item, props) => {
+  return <Text>{item.id}</Text>
 }
 
 const styles = StyleSheet.create({
