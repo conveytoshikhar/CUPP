@@ -118,12 +118,6 @@ class PaymentScreen extends Component {
       <Heading
         title= "Payment Screen"
         containerStyle={headingContainerStyle} />
-
-
-     
-
-      
-
         <View style = {priceDetailsContainer}>
           <View style={priceDetail}>
           <Text style= {priceType}>Loan Amount</Text>
