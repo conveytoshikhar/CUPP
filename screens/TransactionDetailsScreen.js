@@ -45,6 +45,7 @@ class TransactionDetailsScreen extends Component {
       name,
       item
     } = this.state
+
     return (
       <View style={mainContainer}>
       <View>
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
     left: dimens.screenHorizontalMargin
   }
 })
+
 
 TransactionDetailsScreen.navigationOptions = {
   header: null
