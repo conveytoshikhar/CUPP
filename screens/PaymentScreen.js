@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, ScrollView} from 'react-native'
 import { Back, Button, Heading} from '../Components'
-import { dimens, colors, customFonts, strings } from '../constants'
+import { dimens, colors, customFonts, strings, screens } from '../constants'
 import { commonStyling } from '../common' 
 import {PropTypes} from 'prop-types'
 import firebase from '../config/firebase'
@@ -38,6 +38,15 @@ class PaymentScreen extends Component {
       userCreditScore: creditScore
     })
 
+  }
+
+  navigateToOrderSuccessScreen = () => {
+    const {
+      navigation
+    } = this.state
+    navigation.navigate(screens.OrderSuccessScreen, {
+      course: this.state.item
+    })
   }
 
 
@@ -101,7 +110,7 @@ class PaymentScreen extends Component {
                 <Button
                   title='Make Payment'
                   textColor={colors.colorAccent}
-                  onPress={() => {}}
+                  onPress={this.navigateToOrderSuccessScreen}
                   style={deleteButtonModal} />
         </View>
         <View> 
@@ -116,7 +125,7 @@ class PaymentScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  
+
   mainContainer: {
     ...commonStyling.mainContainer,
     paddingTop: 40,
@@ -134,7 +143,7 @@ const styles = StyleSheet.create({
   },
   priceDetailsContainer: {
     width: '100%',
-    padding: 60,
+    padding: 20,
     marginTop: 20,
     marginBottom: 10,
     flexDirection: 'column',
