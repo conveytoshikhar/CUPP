@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, FlatList, Animated, ImageBackground, Dimensions, TouchableOpacity } from 'react-native'
-import { Loading, SearchIcon } from '../Components'
+import { Loading, SearchIcon, Card } from '../Components'
 import { dimens, colors, iconNames, customFonts, screens } from '../constants'
 import firebase from '../config/firebase'
 import { commonStyling } from '../common'
@@ -68,7 +68,6 @@ class ClientOrderScreen extends Component {
       .then(doc => {
         if (doc.exists) {
           orders = doc.data().orders
-          console.log(orders)
         } else {
           console.log('Some error with logic. The user is not in our db.')
         }
@@ -159,7 +158,84 @@ class ClientOrderScreen extends Component {
 }
 
 const OrderItem = (item, props) => {
-  return <Text>{item.id}</Text>
+  const styles = {
+    imageBackgroundStyle: {
+      width: '100%',
+      height: '100%',
+      borderRadius: dimens.defaultBorderRadius
+    },
+    mainContainer: {
+      paddingLeft: dimens.screenHorizontalMargin,
+      paddingRight: dimens.screenHorizontalMargin,
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    outerContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 8,
+      marginBottom: 8
+    },
+    itemHeading: {
+      fontSize: 16,
+      width: 220,
+      color: colors.colorPrimary,
+      fontFamily: customFonts.bold
+    },
+    textContainer: {
+      marginLeft: 12,
+    },
+    itemDes: {
+      fontFamily: customFonts.medium,
+      fontSize: 14,
+      color: colors.blackTransluscent,
+      marginTop: 4,
+      width: 220
+    },
+    status: {
+      position: 'absolute',
+      top: 12,
+      right: 18,
+      color: colors.facebookBlue,
+      fontFamily: customFonts.bold
+    }
+  }
+
+  const {
+    imageBackgroundStyle,
+    mainContainer,
+    outerContainer,
+    itemHeading,
+    textContainer,
+    itemDes,
+    status
+  } = styles
+
+  return (
+    <View style={outerContainer}>
+      <Card height={140} width='95%' elevation={4}>
+        <View style={mainContainer}>
+          <Card
+            width={80}
+            height={80}
+            elevation={4}>
+            <ImageBackground
+              style={imageBackgroundStyle}
+              imageStyle={imageBackgroundStyle}
+              source={{ uri: item.imageURL }} />
+          </Card>
+
+          <View style={textContainer}>
+            <Text style={itemHeading}>{item.courseItem}</Text>
+            <Text style={itemDes} numberOfLines={2} ellipsizeMode='tail'>{item.itemDescription}</Text>
+          </View>
+
+          <Text style={status}>{item.status}</Text>
+        </View>
+      </Card>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

@@ -319,7 +319,7 @@ const CourseItem = (item, props) => {
 
   const component =
     <View style={charityItemOuterContainer}>
-      <Card width='95%' height={180} elevation={4}>
+      <Card width='95%' height={140} elevation={4}>
         <View style={cardItemContainer}>
           <Card width={90} height={90} elevation={dimens.defaultBorderRadius}>
             <ImageBackground
@@ -334,7 +334,7 @@ const CourseItem = (item, props) => {
           }}>
             <View style={textContainer}>
               <Text style={courseHeading}>{item.name}</Text>
-        <Text style={courseDescription} numberOfLines={3} ellipsizeMode='tail'>{item.courseDescription}</Text>
+        <Text style={courseDescription} numberOfLines={2} ellipsizeMode='tail'>{item.courseDescription}</Text>
               <Text style={courseDescription}>{item.price + ' ' + item.currency}</Text>
             </View>
           </TouchableOpacity>
