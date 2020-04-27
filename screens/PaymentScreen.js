@@ -29,7 +29,7 @@ class PaymentScreen extends Component {
       .get()
       .then(function (doc) {
         if (doc.exists) {
-          creditScore = doc.data().credit_score
+          creditScore = doc.data().creditScore
         }
       }).catch(function (error) {
         console.log(error)

@@ -121,9 +121,9 @@ class RegistrationScreen extends Component {
       uid: user.uid,
       name: user.displayName,
       email: user.email,
-      role: null,
       courses: [],
-      orders: []
+      orders: [],
+      creditScore: Math.floor(Math.random() * 5) + 1  
     })
 
 
