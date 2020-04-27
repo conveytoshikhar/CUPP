@@ -5,6 +5,7 @@ import { dimens, colors, customFonts, screens } from '../constants'
 import { commonStyling } from '../common' 
 import {PropTypes} from 'prop-types'
 import LottieView from 'lottie-react-native';
+import { Utils } from '../utils';
 
 class OrderSuccessScreen extends Component {
   constructor(props){
@@ -20,10 +21,11 @@ class OrderSuccessScreen extends Component {
   }
 
   navigateToCourseScreen = () => {
-    const {
-      navigation
-    } = this.state
-    navigation.navigate(screens.ClientWelcomeScreen)
+    // const {
+    //   navigation
+    // } = this.state
+    // navigation.navigate(screens.ClientWelcomeScreen)
+    Utils.dispatchScreen(screens.ClientHome, 100, this.state.navigation)
   }
   
 
