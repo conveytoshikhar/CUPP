@@ -15,7 +15,8 @@ class PaymentScreen extends Component {
     this.state = {
       navigation: props.navigation,
       item: props.navigation.getParam('course'),
-      userCreditScore: null
+      userCreditScore: null,
+      paymentButtonLoading: false
     }
   }
 
@@ -40,6 +41,35 @@ class PaymentScreen extends Component {
 
   }
 
+  proceedWithOrderProcessing = async () => {
+    this.setState({
+      paymentButtonLoading: true
+    })
+    const firestore = firebase.firestore()
+    const ref = firestore.collection('users')
+    const user = firebase.auth().currentUser
+    const { item } = this.state
+
+    const orderObject = {
+      courseItem: item.name,
+      coursePrice: item.price,
+      imageURL: item.imageURL,
+      itemDescription: item.courseDescription,
+      status: "Pending"
+    }
+
+    await ref.doc(user.uid).update({
+      orders: firebase.firestore.FieldValue.arrayUnion(orderObject)
+    }).then( () => {
+      this.setState({
+        paymentButtonLoading: false
+      })
+      this.navigateToOrderSuccessScreen()
+    }).catch( (error) => {
+      alert('Some probem with our servers: ',error)
+    })
+  }
+
   navigateToOrderSuccessScreen = () => {
     const {
       navigation
@@ -62,7 +92,8 @@ class PaymentScreen extends Component {
       headingContainerStyle,
       buttonContainerModal,
       deleteButtonModal,
-      totalAmount
+      totalAmount,
+      logoContainer
     } = styles
 
     const {
@@ -77,17 +108,16 @@ class PaymentScreen extends Component {
     
 
     return (
-      <View style={mainContainer}>
-      <ScrollView contentContainerStyle={{ height: 500 }}>
+     
+      <ScrollView contentContainerStyle={{ height: 500 }} style={mainContainer}>
 
       <Back
           style={{ ...commonStyling.backButtonStyling }}
           onPress={() => navigation.goBack()} />
+
       <Heading
         title= "Payment Screen"
         containerStyle={headingContainerStyle} />
-      
-
         <View style = {priceDetailsContainer}>
           <View style={priceDetail}>
           <Text style= {priceType}>Loan Amount</Text>
@@ -110,14 +140,15 @@ class PaymentScreen extends Component {
                 <Button
                   title='Make Payment'
                   textColor={colors.colorAccent}
-                  onPress={this.navigateToOrderSuccessScreen}
-                  style={deleteButtonModal} />
+                  onPress={this.proceedWithOrderProcessing}
+                  style={deleteButtonModal} 
+                  isLoading= {this.state.paymentButtonLoading} />
         </View>
         <View> 
         </View>
         
     </ScrollView>
-      </View>
+
 
     );
 
@@ -175,7 +206,8 @@ const styles = StyleSheet.create({
   },
 
   headingContainer:{
-    flexDirection: 'row',
+    flexDirection: 'column',
+    
 
   },
 
@@ -191,6 +223,13 @@ const styles = StyleSheet.create({
     height: dimens.buttonHeight,
     backgroundColor: colors.colorPrimary
   },
+
+  logoContainer: {
+    flex: 1,
+    paddingTop: dimens.screenSafeUpperNotchDistance + 80,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 
 })
 
