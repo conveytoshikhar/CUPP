@@ -16,6 +16,7 @@ class PaymentScreen extends Component {
       navigation: props.navigation,
       item: props.navigation.getParam('course'),
       userCreditScore: null,
+      userInterestRate: null,
       paymentButtonLoading: false
     }
   }
@@ -25,18 +26,21 @@ class PaymentScreen extends Component {
     const ref = firestore.collection('users')
     const user = firebase.auth().currentUser
     let creditScore = null
+    let interestRate = null
     await ref.doc(user.uid)
       .get()
       .then(function (doc) {
         if (doc.exists) {
           creditScore = doc.data().creditScore
+          interestRate = doc.data().interestRate
         }
       }).catch(function (error) {
         console.log(error)
       })
 
     this.setState({
-      userCreditScore: creditScore
+      userCreditScore: creditScore,
+      userInterestRate: interestRate
     })
 
   }
@@ -102,7 +106,8 @@ class PaymentScreen extends Component {
 
     const {
       item,
-      userCreditScore
+      userCreditScore,
+      userInterestRate
     } = this.state
 
 
@@ -127,6 +132,10 @@ class PaymentScreen extends Component {
           <View style={priceDetail}>
             <Text style={priceType}>Your Credit Score</Text>
             <Text style={priceValue}>{userCreditScore}</Text>
+          </View>
+          <View style={priceDetail}>
+            <Text style={priceType}>Interest Rate</Text>
+            <Text style={priceValue}>{userInterestRate}</Text>
           </View>
           <View style={priceDetail}>
             <Text style={priceType}>Service Charge</Text>

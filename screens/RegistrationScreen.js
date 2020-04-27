@@ -116,14 +116,17 @@ class RegistrationScreen extends Component {
     const firestore = firebase.firestore()
     const ref = firestore.collection('users')
     const user = firebase.auth().currentUser
-
+    const creditScoreList = [2.5, 3.5, 4.2]
+    const interestRateList = ["2.50%", "4.50%", "5.50%"]
+    let randomIndexForScore = Math.floor(Math.random() * 2 + 0)
     await ref.doc(user.uid).set({
       uid: user.uid,
       name: user.displayName,
       email: user.email,
       courses: [],
       orders: [],
-      creditScore: Math.floor(Math.random() * 5) + 1  
+      creditScore: creditScoreList[randomIndexForScore],
+      interestRate: interestRateList[randomIndexForScore]
     })
 
 
