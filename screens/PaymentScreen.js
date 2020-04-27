@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
 
   totalAmount: {
     alignItems: 'center',
-    padding: 25,
+    padding: 20,
     borderColor: colors.grayTransluscent,
     borderBottomWidth: 1,
     borderTopWidth: 1
@@ -226,7 +226,8 @@ const styles = StyleSheet.create({
   buttonContainerModal: {
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 10
   },
 
   deleteButtonModal: {
