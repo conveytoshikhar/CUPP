@@ -72,8 +72,9 @@ class ClientWelcomeScreen extends Component {
     }
     const searchEntered = search.toUpperCase()
     const newListToShow = []
+    console.log(this.state.coursesList)
     for (let index in this.state.coursesList) {
-      const title = this.state.coursesList[index].name
+      const title = this.state.coursesList[index].title
       let itemObject = this.state.coursesList[index]
       const coursesToShow = []
       for (let index in itemObject.data) {

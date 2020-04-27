@@ -31,12 +31,12 @@ class WelcomeScreen extends React.Component {
     const screen =
       <View style={mainContainer}>
         <ImageBackground
-          source={require('../assets/Onboarding/welcome.jpeg')}
+          source={require('../assets/Onboarding/intro.jpeg')}
           style={backgroundStyle}>
           <View style={contentContainer}>
             <View style={logoContainer}>
               <LogoPlaceholder accent={colors.colorAccent} size={40} />
-              <Text style={subHeading}>Insert Subheading Here</Text>
+              <Text style={subHeading}>A Beginning With No End</Text>
             </View>
             <View style={buttonContainer}>
               <OutlineButton
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   loginButton: {
     width: '75%',
     backgroundColor: colors.colorAccent,
-    marginTop: dimens.screenVerticalMargin * 1.5
+    marginTop: dimens.screenVerticalMargin
   },
   loginButtonText: {
     fontSize: 20,

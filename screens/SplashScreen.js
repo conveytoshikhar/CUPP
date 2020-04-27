@@ -67,7 +67,7 @@ class SplashScreen extends Component {
       <ImageBackground
         style={mainContainer}
         imageStyle={{ paddingLeft: 120 }}
-        source={require('../assets/Splash/splashScreen.jpg')}>
+        source={require('../assets/Splash/books.jpeg')}>
         <View style={overlayStyle}>
           <LogoPlaceholder accent={colors.colorAccent} size={55} iconSize={35} iconMargin={18} />
           <View style={loadingContainer}>
