@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, ScrollView} from 'react-native'
-import { Back, Button, Heading} from '../Components'
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
+import { Back, Button, Heading } from '../Components'
 import { dimens, colors, customFonts, strings, screens } from '../constants'
-import { commonStyling } from '../common' 
-import {PropTypes} from 'prop-types'
+import { commonStyling } from '../common'
+import { PropTypes } from 'prop-types'
 import firebase from '../config/firebase'
 
 
 class PaymentScreen extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.getUserCreditScore()
     this.state = {
@@ -23,17 +23,17 @@ class PaymentScreen extends Component {
   getUserCreditScore = async () => {
     const firestore = firebase.firestore()
     const ref = firestore.collection('users')
-    const user =firebase.auth().currentUser
+    const user = firebase.auth().currentUser
     let creditScore = null
     await ref.doc(user.uid)
-          .get()
-          .then(function(doc){
-            if(doc.exists) {
-              creditScore = doc.data().credit_score
-            }
-          }).catch(function(error){
-            console.log(error)
-          })
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          creditScore = doc.data().credit_score
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
 
     this.setState({
       userCreditScore: creditScore
@@ -60,13 +60,13 @@ class PaymentScreen extends Component {
 
     await ref.doc(user.uid).update({
       orders: firebase.firestore.FieldValue.arrayUnion(orderObject)
-    }).then( () => {
+    }).then(() => {
       this.setState({
         paymentButtonLoading: false
       })
       this.navigateToOrderSuccessScreen()
-    }).catch( (error) => {
-      alert('Some probem with our servers: ',error)
+    }).catch((error) => {
+      alert('Some probem with our servers: ', error)
     })
   }
 
@@ -105,23 +105,24 @@ class PaymentScreen extends Component {
       userCreditScore
     } = this.state
 
-    
+
 
     return (
-     
+
       <ScrollView contentContainerStyle={{ height: 500 }} style={mainContainer}>
 
-      <Back
-          style={{ ...commonStyling.backButtonStyling }}
+        <Back
+          style={{ position: 'absolute', top: 10, left: dimens.screenHorizontalMargin }}
+          size={40}
           onPress={() => navigation.goBack()} />
 
-      <Heading
-        title= "Payment Screen"
-        containerStyle={headingContainerStyle} />
-        <View style = {priceDetailsContainer}>
+        <Heading
+          title="Payment Screen"
+          containerStyle={headingContainerStyle} />
+        <View style={priceDetailsContainer}>
           <View style={priceDetail}>
-          <Text style= {priceType}>Loan Amount</Text>
-          <Text style={priceValue}>$ {item.price}</Text>
+            <Text style={priceType}>Loan Amount</Text>
+            <Text style={priceValue}>$ {item.price}</Text>
           </View>
           <View style={priceDetail}>
             <Text style={priceType}>Your Credit Score</Text>
@@ -131,23 +132,23 @@ class PaymentScreen extends Component {
             <Text style={priceType}>Service Charge</Text>
             <Text style={priceValue}>$ 2.00</Text>
           </View>
-          <View style = {totalAmount}>
+          <View style={totalAmount}>
             <Text style={priceType}>Total Amount Payable</Text>
             <Text style={priceValue}>$ 2.00</Text>
           </View>
         </View>
         <View style={buttonContainerModal}>
-                <Button
-                  title='Make Payment'
-                  textColor={colors.colorAccent}
-                  onPress={this.proceedWithOrderProcessing}
-                  style={deleteButtonModal} 
-                  isLoading= {this.state.paymentButtonLoading} />
+          <Button
+            title='Make Payment'
+            textColor={colors.colorAccent}
+            onPress={this.proceedWithOrderProcessing}
+            style={deleteButtonModal}
+            isLoading={this.state.paymentButtonLoading} />
         </View>
-        <View> 
+        <View>
         </View>
-        
-    </ScrollView>
+
+      </ScrollView>
 
 
     );
@@ -169,8 +170,9 @@ const styles = StyleSheet.create({
   },
   headingContainerStyle: {
     width: '100%',
-    textAlign: 'left',
-    marginTop: dimens.screenSafeUpperNotchDistance + 70
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50
   },
   priceDetailsContainer: {
     width: '100%',
@@ -181,33 +183,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   priceDetail: {
-    alignItems:'center',
-    padding:25
+    alignItems: 'center',
+    padding: 25
   },
 
   totalAmount: {
-    alignItems:'center',
-    padding:25,
+    alignItems: 'center',
+    padding: 25,
     borderColor: colors.grayTransluscent,
-    borderBottomWidth:1,
-    borderTopWidth:1
+    borderBottomWidth: 1,
+    borderTopWidth: 1
   },
 
   priceType: {
-      fontFamily:customFonts.semiBold, 
-      fontSize:20
-    },
+    fontFamily: customFonts.semiBold,
+    fontSize: 20
+  },
 
-  priceValue:{
-    color:colors.colorPrimary, 
-    fontFamily:customFonts.medium, 
-    fontSize:40,
+  priceValue: {
+    color: colors.colorPrimary,
+    fontFamily: customFonts.medium,
+    fontSize: 40,
     padding: 8
   },
 
-  headingContainer:{
+  headingContainer: {
     flexDirection: 'column',
-    
+
 
   },
 
