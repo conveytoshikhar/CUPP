@@ -110,7 +110,9 @@ const strings = {
   registerWithUs: 'Register With Us',
   iWantTo: 'I want to',
   help: 'Help',
-  ngo: 'NGO'
+  ngo: 'NGO',
+  creditScore: "Current Credit Score",
+  interestRate: "Current Interest Rate"
 }
 
 export default strings

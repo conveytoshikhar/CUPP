@@ -12,9 +12,12 @@ import { connect } from 'react-redux'
 class ProfileScreen extends Component {
   constructor(props) {
     super(props)
+    this.getUserCreditScore()
     this.state = {
       navigation: props.navigation,
       user: firebase.auth().currentUser,
+      userCreditScore: null,
+      userInterestRate: null
     }
   }
 
@@ -24,6 +27,30 @@ class ProfileScreen extends Component {
     })
     await firebase.auth().signOut()
     Utils.dispatchScreen(screens.WelcomeScreen, 1000, this.state.navigation)
+  }
+
+  getUserCreditScore = async () => {
+    const firestore = firebase.firestore()
+    const ref = firestore.collection('users')
+    const user = firebase.auth().currentUser
+    let creditScore = null
+    let interestRate = null
+    await ref.doc(user.uid)
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          creditScore = doc.data().creditScore
+          interestRate = doc.data().interestRate
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+
+    this.setState({
+      userCreditScore: creditScore,
+      userInterestRate: interestRate
+    })
+
   }
 
   render() {
@@ -72,6 +99,24 @@ class ProfileScreen extends Component {
               subHeadingTitle={strings.registeredEmail}
               textTitle={this.state.user ? this.state.user.email : strings.pleaseProvideThis} />
           </View>
+          <View style={rowContainer}>
+            <TextWithSubheading
+              containerStyle={infoItemContainer}
+              subHeadingStyle={subHeadingStyle}
+              textStyle={textStyle}
+              subHeadingTitle={strings.creditScore}
+              textTitle={this.state.user ? this.state.userCreditScore : strings.pleaseProvideThis} />
+          </View>
+          <View style={rowContainer}>
+            <TextWithSubheading
+              containerStyle={infoItemContainer}
+              subHeadingStyle={subHeadingStyle}
+              textStyle={textStyle}
+              subHeadingTitle={strings.interestRate}
+              textTitle={this.state.user ? this.state.userInterestRate : strings.pleaseProvideThis} />
+          </View>
+
+
         
           <View style={buttonContainer}>
             <Button style={signOutButton} textColor={colors.colorAccent} title={strings.signOut} isLoading={this.state.signOutButtonLoading} onPress={this.signOutUser} />
