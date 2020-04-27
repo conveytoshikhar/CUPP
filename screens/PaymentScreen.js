@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 50
+    marginTop: 50,
+    marginBottom: 20
   },
   priceDetailsContainer: {
     width: '100%',
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   },
   priceDetail: {
     alignItems: 'center',
-    padding: 25
+    padding: 15
   },
 
   totalAmount: {
