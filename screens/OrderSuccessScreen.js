@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text} from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import { Heading, Button } from '../Components'
 import { dimens, colors, customFonts, screens } from '../constants'
-import { commonStyling } from '../common' 
-import {PropTypes} from 'prop-types'
+import { commonStyling } from '../common'
+import { PropTypes } from 'prop-types'
 import LottieView from 'lottie-react-native';
 import { Utils } from '../utils';
 
 class OrderSuccessScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       navigation: props.navigation,
@@ -21,13 +21,9 @@ class OrderSuccessScreen extends Component {
   }
 
   navigateToCourseScreen = () => {
-    // const {
-    //   navigation
-    // } = this.state
-    // navigation.navigate(screens.ClientWelcomeScreen)
     Utils.dispatchScreen(screens.ClientHome, 100, this.state.navigation)
   }
-  
+
 
   render() {
     const {
@@ -46,32 +42,32 @@ class OrderSuccessScreen extends Component {
 
     return (
       <View style={mainContainer}>
-      <View style={successContainer}>
-      <LottieView
-                ref={animation => {
-                  this.animation = animation;
-                }}
-                onAnimationFinish={null}
-                loop={false}
-                source={require('../assets/animations/success.json')}
-                width={300}
-                height={300}
-              />
+        <View style={successContainer}>
+          <LottieView
+            ref={animation => {
+              this.animation = animation;
+            }}
+            onAnimationFinish={null}
+            loop={false}
+            source={require('../assets/animations/success.json')}
+            width={300}
+            height={300}
+          />
 
-      
-      </View>
-      <View style = {textContainer}>
-      <Text style = {processingText}>Order has been submitted for processing!</Text>
-      </View>
-      <View style={buttonContainerModal}>
-                <Button
-                  title='Return to Home'
-                  textColor={colors.colorAccent}
-                  onPress={this.navigateToCourseScreen}
-                  style={deleteButtonModal} 
-                  isLoading= {this.state.paymentButtonLoading} />
+
         </View>
- 
+        <View style={textContainer}>
+          <Text style={processingText}>Order has been submitted for processing!</Text>
+        </View>
+        <View style={buttonContainerModal}>
+          <Button
+            title='Return to Home'
+            textColor={colors.colorAccent}
+            onPress={this.navigateToCourseScreen}
+            style={deleteButtonModal}
+            isLoading={this.state.paymentButtonLoading} />
+        </View>
+
       </View>
     );
   }
@@ -85,11 +81,11 @@ const styles = StyleSheet.create({
     paddingRight: dimens.screenDefaultMargin,
   },
   processingText: {
-    color:colors.colorPrimary, 
-    fontFamily:customFonts.bold, 
-    fontSize:20,
+    color: colors.colorPrimary,
+    fontFamily: customFonts.bold,
+    fontSize: 20,
     padding: 20,
-    width:'100%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center'
@@ -108,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 250,
     justifyContent: 'center',
-    padding:40
+    padding: 40
 
   },
   headingContainerStyle: {
